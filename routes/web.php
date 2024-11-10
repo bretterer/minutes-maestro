@@ -5,6 +5,9 @@ use App\Http\Controllers\MeetingsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+Route::get('info', function () {
+    return phpinfo();
+});
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
