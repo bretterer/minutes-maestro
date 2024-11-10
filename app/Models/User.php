@@ -66,4 +66,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function meetings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Meeting::class);
+    }
+
+
 }

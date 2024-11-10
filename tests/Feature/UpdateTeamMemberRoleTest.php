@@ -10,11 +10,11 @@ test('team member roles can be updated', function () {
     );
 
     $this->put('/teams/'.$user->currentTeam->id.'/members/'.$otherUser->id, [
-        'role' => 'editor',
+        'role' => 'secretary',
     ]);
 
     expect($otherUser->fresh()->hasTeamRole(
-        $user->currentTeam->fresh(), 'editor'
+        $user->currentTeam->fresh(), 'secretary'
     ))->toBeTrue();
 });
 

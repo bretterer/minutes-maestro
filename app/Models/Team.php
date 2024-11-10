@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Meeting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
@@ -44,5 +45,10 @@ class Team extends JetstreamTeam
         return [
             'personal_team' => 'boolean',
         ];
+    }
+
+    public function meetings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Meeting::class);
     }
 }
