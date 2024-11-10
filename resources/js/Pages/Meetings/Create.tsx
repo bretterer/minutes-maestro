@@ -1,10 +1,10 @@
 import CreateMeetingForm from '@/Pages/Meetings/Partials/CreateMeetingForm';
-import AppLayout from '@/Layouts/AppLayout';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import React from 'react';
 
 export default function Create() {
   return (
-    <AppLayout
+    <AuthenticatedLayout
       title="Create Meeting"
       renderHeader={() => (
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
@@ -17,6 +17,6 @@ export default function Create() {
             <CreateMeetingForm />
         </div>
       </div>
-    </AppLayout>
+    </AuthenticatedLayout>
   );
 }
