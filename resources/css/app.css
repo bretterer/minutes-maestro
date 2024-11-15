@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-[x-cloak] {
-  display: none;
+/* Custom Styles */
+.modal-container {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close-button {
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0.25rem;
+}
+
+.quill-container {
+  min-height: 150px;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+}
+
+button:active {
+  transform: scale(0.98);
 }

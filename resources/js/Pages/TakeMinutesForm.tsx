@@ -1,93 +1,98 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
-export default function TakeMinutesForm() {
+export default function TakeMinutesForm({ onClose }: { onClose: () => void }) {
+  const [agenda, setAgenda] = useState('');
+  const [discussionPoints, setDiscussionPoints] = useState('');
+  const [actionItems, setActionItems] = useState('');
+  const [notes, setNotes] = useState('');
+
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg sm:rounded-lg mt-8">
-      <h1 className="text-3xl font-semibold text-gray-900 mb-6">Take Meeting Minutes</h1>
-      <form className="space-y-6">
-        {/* Title */}
-        <div className="flex flex-col">
-          <label className="font-semibold text-gray-700 mb-2">Title</label>
-          <input
-            type="text"
-            className="p-3 border rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:outline-none"
-            placeholder="Enter meeting title"
-          />
-        </div>
+    <div className="bg-white rounded-lg shadow-lg p-8 max-w-4xl w-full">
+      <h3 className="text-3xl font-semibold text-gray-900 mb-6">Take Meeting Minutes</h3>
+      
+      {/* Title */}
+      <div className="mb-4">
+        <label className="block text-gray-700 font-bold mb-2" htmlFor="title">Title</label>
+        <input
+          type="text"
+          id="title"
+          placeholder="Enter meeting title"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+      </div>
 
-        {/* Start Time */}
-        <div className="flex flex-col">
-          <label className="font-semibold text-gray-700 mb-2">Start Time</label>
-          <input
-            type="datetime-local"
-            className="p-3 border rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:outline-none"
-          />
-        </div>
+      {/* Start Time */}
+      <div className="mb-4">
+        <label className="block text-gray-700 font-bold mb-2" htmlFor="startTime">Start Time</label>
+        <input
+          type="datetime-local"
+          id="startTime"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+      </div>
 
-        {/* End Time */}
-        <div className="flex flex-col">
-          <label className="font-semibold text-gray-700 mb-2">End Time</label>
-          <input
-            type="datetime-local"
-            className="p-3 border rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:outline-none"
-          />
-        </div>
+      {/* End Time */}
+      <div className="mb-4">
+        <label className="block text-gray-700 font-bold mb-2" htmlFor="endTime">End Time</label>
+        <input
+          type="datetime-local"
+          id="endTime"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+      </div>
 
-        {/* Attendees */}
-        <div className="flex flex-col">
-          <label className="font-semibold text-gray-700 mb-2">Attendees</label>
-          <textarea
-            className="p-3 border rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:outline-none"
-            placeholder="Enter attendees separated by commas"
-          ></textarea>
-        </div>
+      {/* Attendees */}
+      <div className="mb-4">
+        <label className="block text-gray-700 font-bold mb-2" htmlFor="attendees">Attendees</label>
+        <input
+          type="text"
+          id="attendees"
+          placeholder="Enter attendees separated by commas"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+      </div>
 
-        {/* Agenda */}
-        <div className="flex flex-col">
-          <label className="font-semibold text-gray-700 mb-2">Agenda</label>
-          <textarea
-            className="p-3 border rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:outline-none"
-            placeholder="Enter agenda points"
-          ></textarea>
-        </div>
+      {/* Agenda */}
+      <div className="mb-4">
+        <label className="block text-gray-700 font-bold mb-2" htmlFor="agenda">Agenda</label>
+        <ReactQuill value={agenda} onChange={setAgenda} theme="snow" />
+      </div>
 
-        {/* Key Discussion Points */}
-        <div className="flex flex-col">
-          <label className="font-semibold text-gray-700 mb-2">Key Discussion Points</label>
-          <textarea
-            className="p-3 border rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:outline-none"
-            placeholder="Enter key discussion points"
-          ></textarea>
-        </div>
+      {/* Key Discussion Points */}
+      <div className="mb-4">
+        <label className="block text-gray-700 font-bold mb-2" htmlFor="discussionPoints">Key Discussion Points</label>
+        <ReactQuill value={discussionPoints} onChange={setDiscussionPoints} theme="snow" />
+      </div>
 
-        {/* Action Items */}
-        <div className="flex flex-col">
-          <label className="font-semibold text-gray-700 mb-2">Action Items</label>
-          <textarea
-            className="p-3 border rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:outline-none"
-            placeholder="Enter action items"
-          ></textarea>
-        </div>
+      {/* Action Items */}
+      <div className="mb-4">
+        <label className="block text-gray-700 font-bold mb-2" htmlFor="actionItems">Action Items</label>
+        <ReactQuill value={actionItems} onChange={setActionItems} theme="snow" />
+      </div>
 
-        {/* Additional Notes */}
-        <div className="flex flex-col">
-          <label className="font-semibold text-gray-700 mb-2">Additional Notes</label>
-          <textarea
-            className="p-3 border rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:outline-none"
-            placeholder="Enter any additional notes"
-          ></textarea>
-        </div>
+      {/* Additional Notes */}
+      <div className="mb-4">
+        <label className="block text-gray-700 font-bold mb-2" htmlFor="additionalNotes">Additional Notes</label>
+        <ReactQuill value={notes} onChange={setNotes} theme="snow" />
+      </div>
 
-        {/* Save Button */}
-        <div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-blue-300"
-          >
-            Save Minutes
-          </button>
-        </div>
-      </form>
+      {/* Buttons */}
+      <div className="flex justify-end mt-8">
+        <button
+          onClick={onClose}
+          className="bg-gray-500 text-white py-3 px-6 rounded-lg shadow-md mr-4 hover:bg-gray-600 focus:outline-none"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          className="bg-blue-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none"
+        >
+          Save Minutes
+        </button>
+      </div>
     </div>
   );
 }

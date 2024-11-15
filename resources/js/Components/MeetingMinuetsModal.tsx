@@ -1,20 +1,14 @@
-import React, { FC, ReactNode } from 'react';
+import React from 'react';
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: ReactNode;
-}
-
-const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
+export default function Modal({ isOpen, onClose, children }: { isOpen: boolean; onClose: () => void; children: React.ReactNode; }) {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full relative">
+      <div className="modal-container relative bg-white rounded-lg shadow-lg p-10 max-w-5xl w-11/12">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+          className="close-button absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl font-bold"
         >
           &times;
         </button>
@@ -22,6 +16,4 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
       </div>
     </div>
   );
-};
-
-export default Modal;
+}

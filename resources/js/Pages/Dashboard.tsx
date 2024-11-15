@@ -60,17 +60,25 @@ export default function Dashboard() {
               <li className="flex justify-between items-center p-4 bg-gray-50 rounded-md shadow-md">
                 <div>
                   <p className="text-lg font-semibold">Team Sync</p>
-                  <p className="text-sm text-gray-600">March 20, 2024, 2:00 PM</p>
+                  <p className="text-sm text-gray-600">
+                    March 20, 2024, 2:00 PM
+                  </p>
                   <p className="text-sm text-gray-500">Host: John Doe</p>
-                  <p className="text-sm text-gray-500">Attendees: Alice, Bob, Charlie</p>
+                  <p className="text-sm text-gray-500">
+                    Attendees: Alice, Bob, Charlie
+                  </p>
                 </div>
               </li>
               <li className="flex justify-between items-center p-4 bg-gray-50 rounded-md shadow-md">
                 <div>
                   <p className="text-lg font-semibold">Project Kickoff</p>
-                  <p className="text-sm text-gray-600">March 22, 2024, 10:00 AM</p>
+                  <p className="text-sm text-gray-600">
+                    March 22, 2024, 10:00 AM
+                  </p>
                   <p className="text-sm text-gray-500">Host: Sarah Smith</p>
-                  <p className="text-sm text-gray-500">Attendees: Dave, Eve, Frank</p>
+                  <p className="text-sm text-gray-500">
+                    Attendees: Dave, Eve, Frank
+                  </p>
                 </div>
               </li>
             </ul>
@@ -100,8 +108,11 @@ export default function Dashboard() {
       </div>
 
       {/* Take Minutes Modal */}
-      <Modal isOpen={isTakeMinutesModalOpen} onClose={() => setTakeMinutesModalOpen(false)}>
-        <TakeMinutesForm />
+      <Modal
+        isOpen={isTakeMinutesModalOpen}
+        onClose={() => setTakeMinutesModalOpen(false)}
+      >
+        <TakeMinutesForm onClose={() => setTakeMinutesModalOpen(false)} />
       </Modal>
     </AuthenticatedLayout>
   );
