@@ -1,15 +1,11 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\MeetingsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('info', function () {
-    return phpinfo();
-});
-
+// Landing Page
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -19,17 +15,19 @@ Route::get('/', function () {
     ]);
 });
 
+// Authenticated Routes
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+
+    // Dashboard Route
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/meetings/create', [MeetingsController::class, 'create'])->name('meetings.create');
-    Route::post('/meetings', [MeetingsController::class, 'store'])->name('meetings.store');
-
-    Route::get('/take-minutes', function () {
-        return Inertia::render('TakeMinutesForm');
-    })->name('TakeMinutes');
-
+    // Review Minutes (Static View)
     Route::get('/review-minutes', function () {
         return Inertia::render('ReviewMinutes');
     })->name('review-minutes');
+
+    // Review Minutes by ID
+    Route::get('/review-minutes/{id}', function ($id) {
+        return Inertia::render('ReviewMinutes', ['id' => $id]);
+    })->name('review-minutes-id');
 });

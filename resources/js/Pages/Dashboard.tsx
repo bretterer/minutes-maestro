@@ -11,13 +11,17 @@ type Meeting = {
   time: string;
   host: string;
   attendees: string[];
-  minutesAvailable?: boolean; // For recent minutes
+  minutesAvailable?: boolean;
 };
 
 export default function Dashboard() {
   const [isTakeMinutesModalOpen, setTakeMinutesModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"upcoming" | "recent">("upcoming");
+  const [deleteConfirmation, setDeleteConfirmation] = useState<number | null>(
+    null
+  );
+  const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
 
-  // Sample data for meetings
   const upcomingMeetings: Meeting[] = [
     {
       id: 1,
@@ -58,111 +62,228 @@ export default function Dashboard() {
     },
   ];
 
+  const handleDelete = (id: number) => {
+    setDeleteConfirmation(id);
+    setDropdownOpen(null);
+  };
+
+  const confirmDelete = () => {
+    console.log("Deleted meeting ID:", deleteConfirmation);
+    setDeleteConfirmation(null);
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirmation(null);
+  };
+
+  const toggleDropdown = (id: number) => {
+    setDropdownOpen((prev) => (prev === id ? null : id));
+  };
+
   return (
     <AuthenticatedLayout>
       <Head title="Dashboard" />
+      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-50 py-12 px-6">
+        <div className="max-w-7xl mx-auto space-y-12">
+          {/* Hero Banner */}
+          <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg shadow-md p-8">
+            <h1 className="text-3xl font-bold mb-4">Welcome Back, User!</h1>
+            <p className="text-lg">
+              Track your meetings, review minutes, and stay organized
+              effortlessly.
+            </p>
+          </div>
 
-      <div className="py-12">
-        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          {/* Quick Actions Section */}
-          <div className="bg-white shadow-lg sm:rounded-lg p-8 mb-8">
-            <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-              Quick Actions
-            </h3>
-            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-              {/* Create Meeting Button */}
-              <Link
-                href="/meetings/create"
-                className="flex items-center justify-center bg-blue-600 text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <i className="fas fa-calendar-alt mr-2"></i> Create New Meeting
-              </Link>
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <Link
+              href="/meetings/create"
+              className="flex flex-col items-center justify-center bg-white text-blue-600 py-6 px-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition"
+            >
+              <i className="fas fa-calendar-plus text-4xl mb-2"></i>
+              <span className="font-semibold">Create Meeting</span>
+            </Link>
+            <button
+              onClick={() => setTakeMinutesModalOpen(true)}
+              className="flex flex-col items-center justify-center bg-white text-green-600 py-6 px-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition"
+            >
+              <i className="fas fa-pencil-alt text-4xl mb-2"></i>
+              <span className="font-semibold">Take Minutes</span>
+            </button>
+            <Link
+              href="/review-minutes"
+              className="flex flex-col items-center justify-center bg-white text-gray-600 py-6 px-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition"
+            >
+              <i className="fas fa-file-alt text-4xl mb-2"></i>
+              <span className="font-semibold">Review Minutes</span>
+            </Link>
+          </div>
 
-              {/* Take Minutes Button */}
+          {/* Meetings Section with Tabs */}
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            <div className="flex justify-center space-x-4 border-b pb-3">
               <button
-                onClick={() => setTakeMinutesModalOpen(true)}
-                className="flex items-center justify-center bg-green-600 text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500"
+                className={`text-lg font-semibold ${
+                  activeTab === "upcoming"
+                    ? "border-b-4 border-blue-500 text-blue-500"
+                    : "text-gray-600"
+                }`}
+                onClick={() => setActiveTab("upcoming")}
               >
-                <i className="fas fa-pencil-alt mr-2"></i> Take Minutes
+                Upcoming Meetings
               </button>
-
-              {/* Review Minutes Button */}
-              <Link
-                href="/review-minutes"
-                className="flex items-center justify-center bg-gray-600 text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer focus:outline-none focus:ring-2 focus:ring-gray-500"
+              <button
+                className={`text-lg font-semibold ${
+                  activeTab === "recent"
+                    ? "border-b-4 border-blue-500 text-blue-500"
+                    : "text-gray-600"
+                }`}
+                onClick={() => setActiveTab("recent")}
               >
-                <i className="fas fa-clipboard-list mr-2"></i> Review Minutes
-              </Link>
+                Recent Minutes
+              </button>
             </div>
-          </div>
 
-          {/* Upcoming Meetings Section */}
-          <div className="bg-white shadow-lg sm:rounded-lg p-8 mb-8">
-            <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-              Upcoming Meetings
-            </h3>
-            <ul className="mt-4 space-y-4">
-              {upcomingMeetings.map((meeting) => (
-                <li
-                  key={meeting.id}
-                  className="flex justify-between items-center p-4 bg-gray-50 rounded-md shadow-md"
-                >
-                  <div>
-                    <p className="text-lg font-semibold">{meeting.title}</p>
-                    <p className="text-sm text-gray-600">
-                      {meeting.date}, {meeting.time}
-                    </p>
-                    <p className="text-sm text-gray-500">Host: {meeting.host}</p>
-                    <p className="text-sm text-gray-500">
-                      Attendees: {meeting.attendees.join(", ")}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setTakeMinutesModalOpen(true)}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    Take Minutes
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Recent Minutes Section */}
-          <div className="bg-white shadow-lg sm:rounded-lg p-8 mb-8">
-            <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-              Recent Minutes
-            </h3>
-            <ul className="mt-4 space-y-4">
-              {recentMinutes.map((minute) => (
-                <li
-                  key={minute.id}
-                  className="flex justify-between items-center p-4 bg-gray-50 rounded-md shadow-md"
-                >
-                  <div>
-                    <p className="text-lg font-semibold">{minute.title}</p>
-                    <p className="text-sm text-gray-600">
-                      {minute.minutesAvailable
-                        ? "Minutes Available"
-                        : "No Minutes Yet"}
-                    </p>
-                  </div>
-                  {minute.minutesAvailable && (
-                    <Link
-                      href={`/review-minutes/${minute.id}`}
-                      className="bg-gray-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    >
-                      Review Minutes
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <div className="mt-6">
+              {activeTab === "upcoming" ? (
+                <table className="table-auto w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-4 py-2">Title</th>
+                      <th className="px-4 py-2">Date</th>
+                      <th className="px-4 py-2">Time</th>
+                      <th className="px-4 py-2">Host</th>
+                      <th className="px-4 py-2">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {upcomingMeetings.map((meeting) => (
+                      <tr
+                        key={meeting.id}
+                        className="hover:bg-gray-50 transition"
+                      >
+                        <td className="px-4 py-2">{meeting.title}</td>
+                        <td className="px-4 py-2">{meeting.date}</td>
+                        <td className="px-4 py-2">{meeting.time}</td>
+                        <td className="px-4 py-2">{meeting.host}</td>
+                        <td className="px-4 py-2 relative">
+                          <button
+                            onClick={() => toggleDropdown(meeting.id)}
+                            className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
+                          >
+                            Actions
+                          </button>
+                          {dropdownOpen === meeting.id && (
+                            <div className="absolute mt-2 w-40 bg-white shadow-lg rounded-md z-10">
+                              <button
+                                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                                onClick={() => console.log("Review", meeting.id)}
+                              >
+                                Review
+                              </button>
+                              <button
+                                onClick={() => handleDelete(meeting.id)}
+                                className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <table className="table-auto w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-4 py-2">Title</th>
+                      <th className="px-4 py-2">Minutes Status</th>
+                      <th className="px-4 py-2">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recentMinutes.map((minute) => (
+                      <tr
+                        key={minute.id}
+                        className="hover:bg-gray-50 transition"
+                      >
+                        <td className="px-4 py-2">{minute.title}</td>
+                        <td className="px-4 py-2">
+                          {minute.minutesAvailable ? "Available" : "Not Available"}
+                        </td>
+                        <td className="px-4 py-2 relative">
+                          <button
+                            onClick={() => toggleDropdown(minute.id)}
+                            className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
+                          >
+                            Actions
+                          </button>
+                          {dropdownOpen === minute.id && (
+                            <div className="absolute mt-2 w-40 bg-white shadow-lg rounded-md z-10">
+                              <Link
+                                href={`/review-minutes/${minute.id}`}
+                                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                              >
+                                Review
+                              </Link>
+                              <button
+                                onClick={() => handleDelete(minute.id)}
+                                className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                              >
+                                Delete
+                              </button>
+                              <button
+                                onClick={() => console.log("Download", minute.id)}
+                                className="block w-full text-left px-4 py-2 text-blue-600 hover:bg-gray-100"
+                              >
+                                Download
+                              </button>
+                              <button
+                                onClick={() => console.log("Share", minute.id)}
+                                className="block w-full text-left px-4 py-2 text-green-600 hover:bg-gray-100"
+                              >
+                                Share
+                              </button>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Take Minutes Modal */}
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmation && (
+        <Modal isOpen={true} onClose={cancelDelete}>
+          <div className="p-6">
+            <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
+            <p>Are you sure you want to delete this?</p>
+            <div className="mt-4 flex justify-end space-x-4">
+              <button
+                onClick={cancelDelete}
+                className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="bg-red-500 text-white py-1 px-4 rounded-md hover:bg-red-600 transition"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Modal for Taking Minutes */}
       <Modal
         isOpen={isTakeMinutesModalOpen}
         onClose={() => setTakeMinutesModalOpen(false)}
