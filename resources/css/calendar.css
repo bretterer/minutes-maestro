@@ -1,0 +1,148 @@
+/* Calendar Modal Container */
+.calendar-modal-container {
+    position: relative;
+    background-color: #2d3748;
+    padding: 40px;
+    border-radius: 15px;
+    max-width: 800px;  /* Make the modal wider */
+    width: 100%;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  /* Close Button */
+  .close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #e53e3e;
+    transition: transform 0.3s ease;
+  }
+  
+  .close-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .close-button svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Modal Title */
+  .modal-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Calendar Component */
+  .react-calendar {
+    width: 100%;
+    max-width: 100%;
+    border: none;
+    font-family: 'Arial', sans-serif;
+    border-radius: 8px;
+    background-color: #1a202c;  /* Give it a dark background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  }
+  
+  .react-calendar__tile {
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .react-calendar__tile:hover {
+    background-color: #4f9fd2; /* Light blue for hover effect */
+    color: white;
+  }
+  
+  .react-calendar__tile:focus {
+    background-color: #3182ce; /* Focused tile color */
+  }
+  
+  .react-calendar__month-view__days__day--weekend {
+    color: #e53e3e; /* Red for weekends */
+  }
+  
+  /* Search Bar */
+  .search-container {
+    margin-top: 20px;
+    width: 100%;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    background-color: #1a202c;
+    color: white;
+    border: 1px solid #2d3748;
+    font-size: 16px;
+    margin-bottom: 20px; /* Add space below the input */
+  }
+  
+  /* Meetings List */
+  .meetings-list {
+    margin-top: 20px;
+    max-height: 250px;
+    overflow-y: auto; /* Scrollable list */
+    width: 100%;
+  }
+  
+  .meeting-item {
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #1a202c;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .meeting-item:hover {
+    background-color: #4f9fd2; /* Hover effect */
+  }
+  
+  .meeting-title {
+    font-weight: 600;
+    font-size: 18px;
+  }
+  
+  .meeting-date {
+    font-size: 14px;
+    color: #a0aec0;
+  }
+  
+  .no-meetings {
+    font-size: 16px;
+    color: #e53e3e;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media (max-width: 768px) {
+    .calendar-modal-container {
+      padding: 20px;
+    }
+  
+    .modal-title {
+      font-size: 24px;
+    }
+  
+    .search-input {
+      padding: 10px;
+    }
+  
+    .meeting-item {
+      padding: 10px;
+    }
+  }
+  

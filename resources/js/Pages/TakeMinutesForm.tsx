@@ -10,7 +10,6 @@ export default function TakeMinutesForm({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="bg-gray-800 text-gray-100 rounded-lg shadow-lg p-8 max-w-4xl w-full">
-      {/* Add a link tag to load the Quill custom styles */}
       <link rel="stylesheet" type="text/css" href="/css/QuillCustom.css" />
 
       <h3 className="text-3xl font-semibold text-gray-100 mb-6">

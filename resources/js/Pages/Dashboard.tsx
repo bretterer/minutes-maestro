@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import Modal from "@/Components/Modal";
+import Modal from "@/Components/Modal"; 
 import TakeMinutesForm from "@/Pages/TakeMinutesForm";
 import ReviewMinutes from "@/Pages/ReviewMinuets"; 
+import CalendarModal from "@/Pages/CalendarModal"; 
 
 type Meeting = {
   id: number;
@@ -21,10 +22,14 @@ type Meeting = {
 };
 
 export default function Dashboard() {
-  const [isTakeMinutesModalOpen, setTakeMinutesModalOpen] = useState(false); // Modal state for Take Minutes
+  const [isTakeMinutesModalOpen, setTakeMinutesModalOpen] = useState(false); 
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete confirmation modal
+  const [deleteConfirmationId, setDeleteConfirmationId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"upcoming" | "recent">("upcoming");
-  const [deleteConfirmation, setDeleteConfirmation] = useState<number | null>(null);
-  const [dropdownOpen, setDropdownOpen] = useState<number | null>(null); // State to handle dropdown open/close
+  const [dropdownOpen, setDropdownOpen] = useState<number | null>(null); 
+  const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false); // State for Calendar Modal
+  const [selectedMinute, setSelectedMinute] = useState<Meeting | null>(null); // State to hold selected meeting for review
 
   const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
@@ -69,78 +74,42 @@ export default function Dashboard() {
       ],
       notes: "Ensure all KPIs are tracked and reported in the next quarter's meeting.",
     },
-    {
-      id: 2,
-      title: "Sprint Review",
-      date: "March 16, 2024",
-      time: "3:00 PM",
-      host: "Sam Green",
-      attendees: ["Eve", "Frank"],
-      minutesAvailable: true,
-      summary: "Reviewed sprint progress and discussed blockers.",
-      agenda: ["Sprint Overview", "Blockers", "Next Sprint Planning"],
-      discussionPoints: [
-        "Review of completed tasks",
-        "Discussion of blockers",
-        "Planning for the next sprint",
-      ],
-      actionItems: ["Address blockers", "Prepare for next sprint's tasks"],
-      notes: "Ensure blockers are cleared before the next sprint starts.",
-    },
   ];
 
-  // Toggle the dropdown
   const toggleDropdown = (id: number) => {
     setDropdownOpen((prev) => (prev === id ? null : id));
   };
 
-  // Handle clicking outside of dropdown to close it
-  const handleOutsideClick = (event: MouseEvent) => {
-    if (!dropdownRefs.current?.size) return;
-
-    const isOutside = !Array.from(dropdownRefs.current.values()).some((ref) =>
-      ref?.contains(event.target as Node)
-    );
-    if (isOutside) {
-      setDropdownOpen(null);
-    }
-  };
-
-  useEffect(() => {
-    if (dropdownOpen !== null) {
-      document.addEventListener("click", handleOutsideClick);
-    } else {
-      document.removeEventListener("click", handleOutsideClick);
-    }
-    return () => document.removeEventListener("click", handleOutsideClick);
-  }, [dropdownOpen]);
-
   const handleDelete = (id: number) => {
-    setDeleteConfirmation(id);
+    setDeleteConfirmationId(id);
+    setIsDeleteModalOpen(true); // Open delete confirmation modal
     setDropdownOpen(null);
   };
 
   const confirmDelete = () => {
-    console.log("Deleted meeting ID:", deleteConfirmation);
-    setDeleteConfirmation(null);
+    console.log("Deleted meeting ID:", deleteConfirmationId);
+    setDeleteConfirmationId(null);
+    setIsDeleteModalOpen(false); // Close delete confirmation modal
   };
 
   const cancelDelete = () => {
-    setDeleteConfirmation(null);
+    setDeleteConfirmationId(null);
+    setIsDeleteModalOpen(false); // Close delete confirmation modal
   };
 
   const openModal = (minute: Meeting) => {
-    setIsModalOpen(true);
-    setSelectedMinute(minute);
+    setSelectedMinute(minute); // Store the selected minute
+    setIsReviewModalOpen(true); // Open Review Modal
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedMinute(null);
+  const closeReviewModal = () => {
+    setIsReviewModalOpen(false); // Close Review Modal
+    setSelectedMinute(null); // Clear selected minute
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMinute, setSelectedMinute] = useState<Meeting | null>(null);
+  const openCalendarModal = () => {
+    setIsCalendarModalOpen(true); // Open CalendarModal when "Review Minutes" button is clicked
+  };
 
   return (
     <AuthenticatedLayout>
@@ -171,13 +140,13 @@ export default function Dashboard() {
               <i className="fas fa-pencil-alt text-4xl mb-2"></i>
               <span className="font-semibold">Take Minutes</span>
             </button>
-            <Link
-              href="/review-minutes"
+            <button
+              onClick={openCalendarModal}
               className="flex flex-col items-center justify-center bg-gray-800 text-gray-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-gray-300 transform hover:scale-105 transition"
             >
               <i className="fas fa-file-alt text-4xl mb-2"></i>
               <span className="font-semibold">Review Minutes</span>
-            </Link>
+            </button>
           </div>
 
           {/* Meetings Section with Tabs */}
@@ -245,7 +214,7 @@ export default function Dashboard() {
                                 Take Minutes
                               </button>
                               <button
-                                onClick={() => handleDelete(meeting.id)} // Delete meeting
+                                onClick={() => handleDelete(meeting.id)} // Open Delete confirmation modal
                                 className="block w-full text-left px-4 py-2 text-red-400 hover:bg-gray-600"
                               >
                                 Delete
@@ -275,7 +244,7 @@ export default function Dashboard() {
                         </td>
                         <td className="px-4 py-2 relative">
                           <button
-                            onClick={() => openModal(minute)} // Open Review Minutes Modal
+                            onClick={() => openModal(minute)} // Open Review Modal
                             className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
                           >
                             Review
@@ -292,8 +261,8 @@ export default function Dashboard() {
       </div>
 
       {/* Modal for confirming deletion */}
-      {deleteConfirmation !== null && (
-        <Modal isOpen={deleteConfirmation !== null} onClose={cancelDelete}>
+      {isDeleteModalOpen && (
+        <Modal isOpen={isDeleteModalOpen} onClose={cancelDelete}>
           <div className="bg-gray-900 text-white p-6 rounded-lg">
             <h3 className="text-xl font-semibold">Are you sure you want to delete this meeting?</h3>
             <div className="flex justify-end mt-4">
@@ -314,9 +283,22 @@ export default function Dashboard() {
         </Modal>
       )}
 
+      {/* Modal for Calendar to review past minutes */}
+      {isCalendarModalOpen && (
+        <CalendarModal 
+          isOpen={isCalendarModalOpen} 
+          onClose={() => setIsCalendarModalOpen(false)} 
+          meetings={upcomingMeetings} 
+          onMeetingSelect={(meeting) => {
+            console.log(meeting); // Handle meeting selection
+            setIsCalendarModalOpen(false);
+          }}
+        />
+      )}
+
       {/* Modal for reviewing minutes */}
-      {isModalOpen && selectedMinute && (
-        <ReviewMinutes meeting={selectedMinute} onClose={closeModal} />
+      {isReviewModalOpen && selectedMinute && (
+        <ReviewMinutes meeting={selectedMinute} onClose={closeReviewModal} />
       )}
 
       {/* Modal for Take Minutes */}
