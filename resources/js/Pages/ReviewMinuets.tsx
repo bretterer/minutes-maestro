@@ -1,6 +1,5 @@
 import React from "react";
 
-
 interface Meeting {
   title: string;
   date: string;
@@ -16,15 +15,15 @@ interface ReviewMinutesModalProps {
   onClose: () => void;
 }
 
-export default function ReviewMinuets({ meeting, onClose }: ReviewMinutesModalProps) {
+export default function ReviewMinutes({ meeting, onClose }: ReviewMinutesModalProps) {
   return (
     <div
       className="fixed inset-0 bg-gray-800 bg-opacity-60 flex justify-center items-center z-50"
-      onClick={onClose}
+      onClick={onClose} // Close modal when clicking outside
     >
       <div
         className="bg-gray-900 text-white rounded-lg shadow-lg p-8 max-w-3xl w-full"
-        onClick={(e) => e.stopPropagation()} 
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
       >
         <h2 className="text-2xl font-semibold">{meeting.title}</h2>
         <p className="text-sm text-gray-400">Meeting Date: {meeting.date}</p>

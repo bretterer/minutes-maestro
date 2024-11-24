@@ -275,7 +275,7 @@ export default function Dashboard() {
                         </td>
                         <td className="px-4 py-2 relative">
                           <button
-                            onClick={() => openModal(minute)} 
+                            onClick={() => openModal(minute)} // Open Review Minutes Modal
                             className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
                           >
                             Review
@@ -290,6 +290,29 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Modal for confirming deletion */}
+      {deleteConfirmation !== null && (
+        <Modal isOpen={deleteConfirmation !== null} onClose={cancelDelete}>
+          <div className="bg-gray-900 text-white p-6 rounded-lg">
+            <h3 className="text-xl font-semibold">Are you sure you want to delete this meeting?</h3>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={cancelDelete}
+                className="bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 mr-4"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
 
       {/* Modal for reviewing minutes */}
       {isModalOpen && selectedMinute && (
