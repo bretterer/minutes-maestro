@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import Modal from "@/Components/Modal";
-import TakeMinutesForm from "@/Pages/TakeMinutesForm";
+import Modal from "@/Components/Modal"; // Modal component
+import TakeMinutesForm from "@/Pages/TakeMinutesForm"; // Take Minutes Form
+import ReviewMinutes from "@/Pages/ReviewMinuets";
 
 type Meeting = {
   id: number;
@@ -12,15 +13,18 @@ type Meeting = {
   host: string;
   attendees: string[];
   minutesAvailable?: boolean;
+  summary?: string;
+  agenda?: string[];
+  discussionPoints?: string[];
+  actionItems?: string[];
+  notes?: string;
 };
 
 export default function Dashboard() {
-  const [isTakeMinutesModalOpen, setTakeMinutesModalOpen] = useState(false);
+  const [isTakeMinutesModalOpen, setTakeMinutesModalOpen] = useState(false); // Modal state for Take Minutes
   const [activeTab, setActiveTab] = useState<"upcoming" | "recent">("upcoming");
-  const [deleteConfirmation, setDeleteConfirmation] = useState<number | null>(
-    null
-  );
-  const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<number | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState<number | null>(null); // State to handle dropdown open/close
 
   const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
@@ -52,6 +56,18 @@ export default function Dashboard() {
       host: "Jane Doe",
       attendees: ["Alice", "Bob", "Charlie"],
       minutesAvailable: true,
+      summary: "Discussed quarterly financial results and set KPIs for the next quarter.",
+      agenda: ["Introduction and Overview", "Financial Update", "Next Steps"],
+      discussionPoints: [
+        "Quarterly earnings and projections",
+        "KPIs for next quarter",
+        "Team objectives and milestones",
+      ],
+      actionItems: [
+        "Prepare financial report for next quarter",
+        "Follow up with the product team on milestones",
+      ],
+      notes: "Ensure all KPIs are tracked and reported in the next quarter's meeting.",
     },
     {
       id: 2,
@@ -61,28 +77,25 @@ export default function Dashboard() {
       host: "Sam Green",
       attendees: ["Eve", "Frank"],
       minutesAvailable: true,
+      summary: "Reviewed sprint progress and discussed blockers.",
+      agenda: ["Sprint Overview", "Blockers", "Next Sprint Planning"],
+      discussionPoints: [
+        "Review of completed tasks",
+        "Discussion of blockers",
+        "Planning for the next sprint",
+      ],
+      actionItems: ["Address blockers", "Prepare for next sprint's tasks"],
+      notes: "Ensure blockers are cleared before the next sprint starts.",
     },
   ];
-
-  const handleDelete = (id: number) => {
-    setDeleteConfirmation(id);
-    setDropdownOpen(null);
-  };
-
-  const confirmDelete = () => {
-    console.log("Deleted meeting ID:", deleteConfirmation);
-    setDeleteConfirmation(null);
-  };
-
-  const cancelDelete = () => {
-    setDeleteConfirmation(null);
-  };
 
   const toggleDropdown = (id: number) => {
     setDropdownOpen((prev) => (prev === id ? null : id));
   };
 
   const handleOutsideClick = (event: MouseEvent) => {
+    if (!dropdownRefs.current?.size) return;
+
     const isOutside = !Array.from(dropdownRefs.current.values()).some((ref) =>
       ref?.contains(event.target as Node)
     );
@@ -100,6 +113,33 @@ export default function Dashboard() {
     return () => document.removeEventListener("click", handleOutsideClick);
   }, [dropdownOpen]);
 
+  const handleDelete = (id: number) => {
+    setDeleteConfirmation(id);
+    setDropdownOpen(null);
+  };
+
+  const confirmDelete = () => {
+    console.log("Deleted meeting ID:", deleteConfirmation);
+    setDeleteConfirmation(null);
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirmation(null);
+  };
+
+  const openModal = (minute: Meeting) => {
+    setIsModalOpen(true);
+    setSelectedMinute(minute);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedMinute(null);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMinute, setSelectedMinute] = useState<Meeting | null>(null);
+
   return (
     <AuthenticatedLayout>
       <Head title="Dashboard" />
@@ -109,8 +149,7 @@ export default function Dashboard() {
           <div className="bg-gradient-to-r from-indigo-700 via-blue-800 to-indigo-900 text-white rounded-lg shadow-md p-8">
             <h1 className="text-3xl font-bold mb-4">Welcome Back, User!</h1>
             <p className="text-lg">
-              Track your meetings, review minutes, and stay organized
-              effortlessly.
+              Track your meetings, review minutes, and stay organized effortlessly.
             </p>
           </div>
 
@@ -123,8 +162,9 @@ export default function Dashboard() {
               <i className="fas fa-calendar-plus text-4xl mb-2"></i>
               <span className="font-semibold">Create Meeting</span>
             </Link>
+            {/* Take Minutes Button (with modal logic) */}
             <button
-              onClick={() => setTakeMinutesModalOpen(true)}
+              onClick={() => setTakeMinutesModalOpen(true)} // This will open the modal
               className="flex flex-col items-center justify-center bg-gray-800 text-green-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-green-300 transform hover:scale-105 transition"
             >
               <i className="fas fa-pencil-alt text-4xl mb-2"></i>
@@ -178,10 +218,7 @@ export default function Dashboard() {
                   </thead>
                   <tbody>
                     {upcomingMeetings.map((meeting) => (
-                      <tr
-                        key={meeting.id}
-                        className="hover:bg-gray-700 transition"
-                      >
+                      <tr key={meeting.id} className="hover:bg-gray-700 transition">
                         <td className="px-4 py-2">{meeting.title}</td>
                         <td className="px-4 py-2">{meeting.date}</td>
                         <td className="px-4 py-2">{meeting.time}</td>
@@ -193,7 +230,7 @@ export default function Dashboard() {
                           }
                         >
                           <button
-                            onClick={() => toggleDropdown(meeting.id)}
+                            onClick={() => toggleDropdown(meeting.id)} // Toggle dropdown
                             className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
                           >
                             Actions
@@ -202,12 +239,12 @@ export default function Dashboard() {
                             <div className="absolute mt-2 w-40 bg-gray-700 shadow-lg rounded-md z-10">
                               <button
                                 className="block w-full text-left px-4 py-2 hover:bg-gray-600"
-                                onClick={() => setTakeMinutesModalOpen(true)}
+                                onClick={() => setTakeMinutesModalOpen(true)} // Open Take Minutes Modal
                               >
                                 Take Minutes
                               </button>
                               <button
-                                onClick={() => handleDelete(meeting.id)}
+                                onClick={() => handleDelete(meeting.id)} // Delete meeting
                                 className="block w-full text-left px-4 py-2 text-red-400 hover:bg-gray-600"
                               >
                                 Delete
@@ -230,56 +267,18 @@ export default function Dashboard() {
                   </thead>
                   <tbody>
                     {recentMinutes.map((minute) => (
-                      <tr
-                        key={minute.id}
-                        className="hover:bg-gray-700 transition"
-                      >
+                      <tr key={minute.id} className="hover:bg-gray-700 transition">
                         <td className="px-4 py-2">{minute.title}</td>
                         <td className="px-4 py-2">
                           {minute.minutesAvailable ? "Available" : "Not Available"}
                         </td>
-                        <td
-                          className="px-4 py-2 relative"
-                          ref={(el) =>
-                            dropdownRefs.current.set(minute.id, el as HTMLDivElement)
-                          }
-                        >
+                        <td className="px-4 py-2 relative">
                           <button
-                            onClick={() => toggleDropdown(minute.id)}
+                            onClick={() => openModal(minute)} // Open Review Minutes Modal
                             className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
                           >
-                            Actions
+                            Review
                           </button>
-                          {dropdownOpen === minute.id && (
-                            <div className="absolute mt-2 w-40 bg-gray-700 shadow-lg rounded-md z-10">
-                              <Link
-                                href={`/review-minutes/${minute.id}`}
-                                className="block w-full text-left px-4 py-2 hover:bg-gray-600"
-                              >
-                                Review
-                              </Link>
-                              <button
-                                onClick={() => handleDelete(minute.id)}
-                                className="block w-full text-left px-4 py-2 text-red-400 hover:bg-gray-600"
-                              >
-                                Delete
-                              </button>
-                              <button
-                                onClick={() =>
-                                  console.log("Download", minute.id)
-                                }
-                                className="block w-full text-left px-4 py-2 text-blue-400 hover:bg-gray-600"
-                              >
-                                Download
-                              </button>
-                              <button
-                                onClick={() => console.log("Share", minute.id)}
-                                className="block w-full text-left px-4 py-2 text-green-400 hover:bg-gray-600"
-                              >
-                                Share
-                              </button>
-                            </div>
-                          )}
                         </td>
                       </tr>
                     ))}
@@ -291,37 +290,17 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Delete Confirmation Modal */}
-      {deleteConfirmation && (
-        <Modal isOpen={true} onClose={cancelDelete}>
-          <div className="p-6">
-            <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
-            <p>Are you sure you want to delete this?</p>
-            <div className="mt-4 flex justify-end space-x-4">
-              <button
-                onClick={cancelDelete}
-                className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="bg-red-500 text-white py-1 px-4 rounded-md hover:bg-red-600 transition"
-              >
-                Confirm
-              </button>
-            </div>
-          </div>
-        </Modal>
+      {/* Modal for reviewing minutes */}
+      {isModalOpen && selectedMinute && (
+        <ReviewMinutes meeting={selectedMinute} onClose={closeModal} />
       )}
 
-      {/* Modal for Taking Minutes */}
-      <Modal
-        isOpen={isTakeMinutesModalOpen}
-        onClose={() => setTakeMinutesModalOpen(false)}
-      >
-        <TakeMinutesForm onClose={() => setTakeMinutesModalOpen(false)} />
-      </Modal>
+      {/* Modal for Take Minutes */}
+      {isTakeMinutesModalOpen && (
+        <Modal isOpen={isTakeMinutesModalOpen} onClose={() => setTakeMinutesModalOpen(false)}>
+          <TakeMinutesForm onClose={() => setTakeMinutesModalOpen(false)} />
+        </Modal>
+      )}
     </AuthenticatedLayout>
   );
 }

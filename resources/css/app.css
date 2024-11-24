@@ -1,37 +1,80 @@
+/* Tailwind Directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Styles */
+
+/* Modal Container */
 .modal-container {
-  max-height: 90vh;
-  overflow-y: auto;
+  background-color: #1f2937; 
+  color: #e5e7eb; 
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 900px;
+  z-index: 100; 
+  position: relative;
+  overflow-y: auto; 
+  max-height: 90vh; 
 }
 
-.close-button {
+/* Close Button */
+.modal-close-btn {
   font-size: 1.5rem;
   line-height: 1;
   padding: 0.25rem;
+  background-color: #3b82f6; /* Tailwind blue-500 */
+  color: white;
+  border-radius: 0.375rem;
+  transition: background-color 0.3s ease;
 }
 
-.quill-container {
-  min-height: 150px;
+.modal-close-btn:hover {
+  background-color: #2563eb; /* Tailwind blue-600 */
 }
 
-/* Button Focus State */
+/* Modal Content */
+.modal-header {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.modal-body {
+  font-size: 1rem;
+  margin-top: 1rem;
+  color: #d1d5db; /* Tailwind gray-300 */
+}
+
+.modal-section-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.modal-content {
+  margin-bottom: 1rem;
+  color: #d1d5db; /* Tailwind gray-300 */
+}
+
+@media (min-width: 768px) {
+  .modal-container {
+    max-height: 85vh;
+  }
+}
+
+/* Custom Button Focus and Active States */
 button:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Custom focus ring for accessibility */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); 
+}
+
+button:active {
+  transform: scale(0.98); /* Slight press effect */
 }
 
 a:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Consistent focus ring for links */
-}
-
-/* Button Active State */
-button:active {
-  transform: scale(0.98); /* Slight press effect */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); 
 }
 
 /* Tab Buttons for Upcoming/Recent Minutes */
@@ -93,7 +136,7 @@ button:active {
   background-color: #2563eb; /* Tailwind blue-600 */
 }
 
-/* Responsive Adjustments */
+
 @media (min-width: 768px) {
   .modal-container {
     max-height: 85vh;

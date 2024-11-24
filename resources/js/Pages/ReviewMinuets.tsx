@@ -1,62 +1,64 @@
 import React from "react";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-export default function ReviewMinutes() {
-  const mockMinutes = {
-    id: 1, // Use a static ID for now
-    title: "Board Meeting",
-    date: "March 15, 2024",
-    time: "10:00 AM",
-    host: "Jane Doe",
-    attendees: ["Alice", "Bob", "Charlie"],
-    content: `
-      Meeting Agenda:
-      - Discuss quarterly goals
-      - Review performance metrics
-      - Approve budget adjustments
-      
-      Meeting Notes:
-      - Q1 goals are progressing on track.
-      - Performance metrics need improvement in sales.
-      - Budget adjustments were approved unanimously.
-    `,
-  };
-
+export default function ReviewMinutesModal({ meeting, onClose }) {
   return (
-    <AuthenticatedLayout>
-      <div className="py-12">
-        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="bg-white shadow-lg sm:rounded-lg p-8 mb-8">
-            <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-              Review Minutes for {mockMinutes.title} (ID: {mockMinutes.id})
-            </h3>
-            <p className="text-sm text-gray-600">
-              <strong>Date:</strong> {mockMinutes.date}, <strong>Time:</strong>{" "}
-              {mockMinutes.time}
-            </p>
-            <p className="text-sm text-gray-600">
-              <strong>Host:</strong> {mockMinutes.host}
-            </p>
-            <p className="text-sm text-gray-600">
-              <strong>Attendees:</strong> {mockMinutes.attendees.join(", ")}
-            </p>
-            <div className="mt-6">
-              <h4 className="text-lg font-semibold mb-2">Meeting Content</h4>
-              <pre className="bg-gray-100 p-4 rounded-md text-sm whitespace-pre-wrap">
-                {mockMinutes.content}
-              </pre>
-            </div>
-            <div className="mt-6">
-              <button
-                onClick={() => window.print()}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600"
-              >
-                Print as PDF
-              </button>
-            </div>
-          </div>
+    <div
+      className="fixed inset-0 bg-gray-800 bg-opacity-60 flex justify-center items-center z-50"
+      onClick={onClose} // Close modal when clicking outside
+    >
+      <div
+        className="bg-gray-900 text-white rounded-lg shadow-lg p-8 max-w-3xl w-full"
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+      >
+        <h2 className="text-2xl font-semibold">{meeting.title}</h2>
+        <p className="text-sm text-gray-400">Meeting Date: {meeting.date}</p>
+
+        <div className="mt-6">
+          <h3 className="font-bold text-lg">Meeting Summary</h3>
+          <p>{meeting.summary}</p>
+        </div>
+
+        <div className="mt-4">
+          <h3 className="font-bold text-lg">Agenda</h3>
+          <ul className="list-disc pl-5">
+            {meeting.agenda.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-4">
+          <h3 className="font-bold text-lg">Discussion Points</h3>
+          <ul className="list-disc pl-5">
+            {meeting.discussionPoints.map((point, index) => (
+              <li key={index}>{point}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-4">
+          <h3 className="font-bold text-lg">Action Items</h3>
+          <ul className="list-disc pl-5">
+            {meeting.actionItems.map((action, index) => (
+              <li key={index}>{action}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-4">
+          <h3 className="font-bold text-lg">Additional Notes</h3>
+          <p>{meeting.notes}</p>
+        </div>
+
+        <div className="mt-8 flex justify-end">
+          <button
+            className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700"
+            onClick={onClose}
+          >
+            Close
+          </button>
         </div>
       </div>
-    </AuthenticatedLayout>
+    </div>
   );
 }
