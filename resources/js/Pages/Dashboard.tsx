@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Modal from "@/Components/Modal";
@@ -21,6 +21,8 @@ export default function Dashboard() {
     null
   );
   const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
+
+  const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
   const upcomingMeetings: Meeting[] = [
     {
@@ -79,6 +81,24 @@ export default function Dashboard() {
   const toggleDropdown = (id: number) => {
     setDropdownOpen((prev) => (prev === id ? null : id));
   };
+
+  const handleOutsideClick = (event: MouseEvent) => {
+    const isOutside = !Array.from(dropdownRefs.current.values()).some((ref) =>
+      ref?.contains(event.target as Node)
+    );
+    if (isOutside) {
+      setDropdownOpen(null);
+    }
+  };
+
+  useEffect(() => {
+    if (dropdownOpen !== null) {
+      document.addEventListener("click", handleOutsideClick);
+    } else {
+      document.removeEventListener("click", handleOutsideClick);
+    }
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, [dropdownOpen]);
 
   return (
     <AuthenticatedLayout>
@@ -166,7 +186,12 @@ export default function Dashboard() {
                         <td className="px-4 py-2">{meeting.date}</td>
                         <td className="px-4 py-2">{meeting.time}</td>
                         <td className="px-4 py-2">{meeting.host}</td>
-                        <td className="px-4 py-2 relative">
+                        <td
+                          className="px-4 py-2 relative"
+                          ref={(el) =>
+                            dropdownRefs.current.set(meeting.id, el as HTMLDivElement)
+                          }
+                        >
                           <button
                             onClick={() => toggleDropdown(meeting.id)}
                             className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
@@ -177,9 +202,9 @@ export default function Dashboard() {
                             <div className="absolute mt-2 w-40 bg-gray-700 shadow-lg rounded-md z-10">
                               <button
                                 className="block w-full text-left px-4 py-2 hover:bg-gray-600"
-                                onClick={() => console.log("Review", meeting.id)}
+                                onClick={() => setTakeMinutesModalOpen(true)}
                               >
-                                Review
+                                Take Minutes
                               </button>
                               <button
                                 onClick={() => handleDelete(meeting.id)}
@@ -213,7 +238,12 @@ export default function Dashboard() {
                         <td className="px-4 py-2">
                           {minute.minutesAvailable ? "Available" : "Not Available"}
                         </td>
-                        <td className="px-4 py-2 relative">
+                        <td
+                          className="px-4 py-2 relative"
+                          ref={(el) =>
+                            dropdownRefs.current.set(minute.id, el as HTMLDivElement)
+                          }
+                        >
                           <button
                             onClick={() => toggleDropdown(minute.id)}
                             className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
@@ -235,7 +265,9 @@ export default function Dashboard() {
                                 Delete
                               </button>
                               <button
-                                onClick={() => console.log("Download", minute.id)}
+                                onClick={() =>
+                                  console.log("Download", minute.id)
+                                }
                                 className="block w-full text-left px-4 py-2 text-blue-400 hover:bg-gray-600"
                               >
                                 Download
