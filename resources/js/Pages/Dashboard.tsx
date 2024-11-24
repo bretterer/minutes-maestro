@@ -83,10 +83,10 @@ export default function Dashboard() {
   return (
     <AuthenticatedLayout>
       <Head title="Dashboard" />
-      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-50 py-12 px-6">
+      <div className="min-h-screen bg-gray-900 text-gray-300 py-12 px-6">
         <div className="max-w-7xl mx-auto space-y-12">
           {/* Hero Banner */}
-          <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg shadow-md p-8">
+          <div className="bg-gradient-to-r from-indigo-700 via-blue-800 to-indigo-900 text-white rounded-lg shadow-md p-8">
             <h1 className="text-3xl font-bold mb-4">Welcome Back, User!</h1>
             <p className="text-lg">
               Track your meetings, review minutes, and stay organized
@@ -98,21 +98,21 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <Link
               href="/meetings/create"
-              className="flex flex-col items-center justify-center bg-white text-blue-600 py-6 px-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition"
+              className="flex flex-col items-center justify-center bg-gray-800 text-blue-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-blue-300 transform hover:scale-105 transition"
             >
               <i className="fas fa-calendar-plus text-4xl mb-2"></i>
               <span className="font-semibold">Create Meeting</span>
             </Link>
             <button
               onClick={() => setTakeMinutesModalOpen(true)}
-              className="flex flex-col items-center justify-center bg-white text-green-600 py-6 px-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition"
+              className="flex flex-col items-center justify-center bg-gray-800 text-green-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-green-300 transform hover:scale-105 transition"
             >
               <i className="fas fa-pencil-alt text-4xl mb-2"></i>
               <span className="font-semibold">Take Minutes</span>
             </button>
             <Link
               href="/review-minutes"
-              className="flex flex-col items-center justify-center bg-white text-gray-600 py-6 px-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition"
+              className="flex flex-col items-center justify-center bg-gray-800 text-gray-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-gray-300 transform hover:scale-105 transition"
             >
               <i className="fas fa-file-alt text-4xl mb-2"></i>
               <span className="font-semibold">Review Minutes</span>
@@ -120,13 +120,13 @@ export default function Dashboard() {
           </div>
 
           {/* Meetings Section with Tabs */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="bg-gray-800 rounded-lg shadow-lg p-8">
             <div className="flex justify-center space-x-4 border-b pb-3">
               <button
                 className={`text-lg font-semibold ${
                   activeTab === "upcoming"
-                    ? "border-b-4 border-blue-500 text-blue-500"
-                    : "text-gray-600"
+                    ? "border-b-4 border-blue-500 text-blue-400"
+                    : "text-gray-400"
                 }`}
                 onClick={() => setActiveTab("upcoming")}
               >
@@ -135,8 +135,8 @@ export default function Dashboard() {
               <button
                 className={`text-lg font-semibold ${
                   activeTab === "recent"
-                    ? "border-b-4 border-blue-500 text-blue-500"
-                    : "text-gray-600"
+                    ? "border-b-4 border-blue-500 text-blue-400"
+                    : "text-gray-400"
                 }`}
                 onClick={() => setActiveTab("recent")}
               >
@@ -148,7 +148,7 @@ export default function Dashboard() {
               {activeTab === "upcoming" ? (
                 <table className="table-auto w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-gray-100">
+                    <tr className="bg-gray-700">
                       <th className="px-4 py-2">Title</th>
                       <th className="px-4 py-2">Date</th>
                       <th className="px-4 py-2">Time</th>
@@ -160,7 +160,7 @@ export default function Dashboard() {
                     {upcomingMeetings.map((meeting) => (
                       <tr
                         key={meeting.id}
-                        className="hover:bg-gray-50 transition"
+                        className="hover:bg-gray-700 transition"
                       >
                         <td className="px-4 py-2">{meeting.title}</td>
                         <td className="px-4 py-2">{meeting.date}</td>
@@ -174,16 +174,16 @@ export default function Dashboard() {
                             Actions
                           </button>
                           {dropdownOpen === meeting.id && (
-                            <div className="absolute mt-2 w-40 bg-white shadow-lg rounded-md z-10">
+                            <div className="absolute mt-2 w-40 bg-gray-700 shadow-lg rounded-md z-10">
                               <button
-                                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                                className="block w-full text-left px-4 py-2 hover:bg-gray-600"
                                 onClick={() => console.log("Review", meeting.id)}
                               >
                                 Review
                               </button>
                               <button
                                 onClick={() => handleDelete(meeting.id)}
-                                className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                                className="block w-full text-left px-4 py-2 text-red-400 hover:bg-gray-600"
                               >
                                 Delete
                               </button>
@@ -197,7 +197,7 @@ export default function Dashboard() {
               ) : (
                 <table className="table-auto w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-gray-100">
+                    <tr className="bg-gray-700">
                       <th className="px-4 py-2">Title</th>
                       <th className="px-4 py-2">Minutes Status</th>
                       <th className="px-4 py-2">Actions</th>
@@ -207,7 +207,7 @@ export default function Dashboard() {
                     {recentMinutes.map((minute) => (
                       <tr
                         key={minute.id}
-                        className="hover:bg-gray-50 transition"
+                        className="hover:bg-gray-700 transition"
                       >
                         <td className="px-4 py-2">{minute.title}</td>
                         <td className="px-4 py-2">
@@ -221,28 +221,28 @@ export default function Dashboard() {
                             Actions
                           </button>
                           {dropdownOpen === minute.id && (
-                            <div className="absolute mt-2 w-40 bg-white shadow-lg rounded-md z-10">
+                            <div className="absolute mt-2 w-40 bg-gray-700 shadow-lg rounded-md z-10">
                               <Link
                                 href={`/review-minutes/${minute.id}`}
-                                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                                className="block w-full text-left px-4 py-2 hover:bg-gray-600"
                               >
                                 Review
                               </Link>
                               <button
                                 onClick={() => handleDelete(minute.id)}
-                                className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                                className="block w-full text-left px-4 py-2 text-red-400 hover:bg-gray-600"
                               >
                                 Delete
                               </button>
                               <button
                                 onClick={() => console.log("Download", minute.id)}
-                                className="block w-full text-left px-4 py-2 text-blue-600 hover:bg-gray-100"
+                                className="block w-full text-left px-4 py-2 text-blue-400 hover:bg-gray-600"
                               >
                                 Download
                               </button>
                               <button
                                 onClick={() => console.log("Share", minute.id)}
-                                className="block w-full text-left px-4 py-2 text-green-600 hover:bg-gray-100"
+                                className="block w-full text-left px-4 py-2 text-green-400 hover:bg-gray-600"
                               >
                                 Share
                               </button>
