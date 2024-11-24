@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import Modal from "@/Components/Modal"; // Modal component
-import TakeMinutesForm from "@/Pages/TakeMinutesForm"; // Take Minutes Form
-import ReviewMinutes from "@/Pages/ReviewMinuets";
+import Modal from "@/Components/Modal";
+import TakeMinutesForm from "@/Pages/TakeMinutesForm";
+import ReviewMinutes from "@/Pages/ReviewMinuets"; 
 
 type Meeting = {
   id: number;
@@ -13,7 +13,7 @@ type Meeting = {
   host: string;
   attendees: string[];
   minutesAvailable?: boolean;
-  summary?: string;
+  summary?: string; 
   agenda?: string[];
   discussionPoints?: string[];
   actionItems?: string[];
@@ -89,10 +89,12 @@ export default function Dashboard() {
     },
   ];
 
+  // Toggle the dropdown
   const toggleDropdown = (id: number) => {
     setDropdownOpen((prev) => (prev === id ? null : id));
   };
 
+  // Handle clicking outside of dropdown to close it
   const handleOutsideClick = (event: MouseEvent) => {
     if (!dropdownRefs.current?.size) return;
 
@@ -162,9 +164,8 @@ export default function Dashboard() {
               <i className="fas fa-calendar-plus text-4xl mb-2"></i>
               <span className="font-semibold">Create Meeting</span>
             </Link>
-            {/* Take Minutes Button (with modal logic) */}
             <button
-              onClick={() => setTakeMinutesModalOpen(true)} // This will open the modal
+              onClick={() => setTakeMinutesModalOpen(true)}
               className="flex flex-col items-center justify-center bg-gray-800 text-green-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-green-300 transform hover:scale-105 transition"
             >
               <i className="fas fa-pencil-alt text-4xl mb-2"></i>
@@ -274,7 +275,7 @@ export default function Dashboard() {
                         </td>
                         <td className="px-4 py-2 relative">
                           <button
-                            onClick={() => openModal(minute)} // Open Review Minutes Modal
+                            onClick={() => openModal(minute)} 
                             className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
                           >
                             Review

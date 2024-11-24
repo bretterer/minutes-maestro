@@ -1,14 +1,30 @@
 import React from "react";
 
-export default function ReviewMinutesModal({ meeting, onClose }) {
+
+interface Meeting {
+  title: string;
+  date: string;
+  summary?: string; 
+  agenda?: string[]; 
+  discussionPoints?: string[]; 
+  actionItems?: string[]; 
+  notes?: string; 
+}
+
+interface ReviewMinutesModalProps {
+  meeting: Meeting; 
+  onClose: () => void;
+}
+
+export default function ReviewMinuets({ meeting, onClose }: ReviewMinutesModalProps) {
   return (
     <div
       className="fixed inset-0 bg-gray-800 bg-opacity-60 flex justify-center items-center z-50"
-      onClick={onClose} // Close modal when clicking outside
+      onClick={onClose}
     >
       <div
         className="bg-gray-900 text-white rounded-lg shadow-lg p-8 max-w-3xl w-full"
-        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+        onClick={(e) => e.stopPropagation()} 
       >
         <h2 className="text-2xl font-semibold">{meeting.title}</h2>
         <p className="text-sm text-gray-400">Meeting Date: {meeting.date}</p>
@@ -21,7 +37,7 @@ export default function ReviewMinutesModal({ meeting, onClose }) {
         <div className="mt-4">
           <h3 className="font-bold text-lg">Agenda</h3>
           <ul className="list-disc pl-5">
-            {meeting.agenda.map((item, index) => (
+            {meeting.agenda?.map((item: string, index: number) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
@@ -30,7 +46,7 @@ export default function ReviewMinutesModal({ meeting, onClose }) {
         <div className="mt-4">
           <h3 className="font-bold text-lg">Discussion Points</h3>
           <ul className="list-disc pl-5">
-            {meeting.discussionPoints.map((point, index) => (
+            {meeting.discussionPoints?.map((point: string, index: number) => (
               <li key={index}>{point}</li>
             ))}
           </ul>
@@ -39,7 +55,7 @@ export default function ReviewMinutesModal({ meeting, onClose }) {
         <div className="mt-4">
           <h3 className="font-bold text-lg">Action Items</h3>
           <ul className="list-disc pl-5">
-            {meeting.actionItems.map((action, index) => (
+            {meeting.actionItems?.map((action: string, index: number) => (
               <li key={index}>{action}</li>
             ))}
           </ul>
