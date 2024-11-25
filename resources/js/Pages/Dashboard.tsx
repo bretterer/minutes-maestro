@@ -4,7 +4,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Modal from "@/Components/Modal"; 
 import TakeMinutesForm from "@/Pages/TakeMinutesForm";
 import ReviewMinutes from "@/Pages/ReviewMinuets"; 
-import CalendarModal from "@/Pages/CalendarModal"; 
+import CalendarModal from "@/Pages/PastMeetings"; 
 
 type Meeting = {
   id: number;

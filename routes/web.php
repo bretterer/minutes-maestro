@@ -35,4 +35,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/take-minutes', function () {
         return Inertia::render('TakeMinutesForm');
     })->name('take-minutes');
+
+    
 });
