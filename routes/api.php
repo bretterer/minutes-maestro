@@ -23,3 +23,10 @@ Route::get('/committees', function () {
 Route::get('/meetings/{meeting}/committees', function (Meeting $meeting) {
     return $meeting->committees;
 })->middleware('auth:sanctum');
+
+
+Route::post('/meetings/{meeting}/approveMinutes', function (Meeting $meeting) {
+    $meeting->minutes_approved = true;
+    $meeting->save();
+    return response()->json(['message' => 'Minutes approved']);
+})->middleware('auth:sanctum');
