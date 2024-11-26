@@ -14,7 +14,7 @@ type Meeting = {
   time: string;
   host: string;
   attendees: string[];
-  minutesAvailable?: boolean;
+  minutesApproved?: boolean;
   summary?: string;
   agenda?: string[];
   discussionPoints?: string[];
@@ -38,7 +38,8 @@ export default function Dashboard() {
 
   const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
-  const upcomingMeetings = props.meetings as Meeting[];;
+  const upcomingMeetings = props.meetings as Meeting[];
+  const recentMinutes = props.recentMeetings as Meeting[];
 
 //   const upcomingMeetings: Meeting[] = [
 
@@ -61,29 +62,29 @@ export default function Dashboard() {
 
 //   ];
 
-  const recentMinutes: Meeting[] = [
-    {
-      id: 1,
-      title: "Board Meeting",
-      date: "March 15, 2024",
-      time: "10:00 AM",
-      host: "Jane Doe",
-      attendees: ["Alice", "Bob", "Charlie"],
-      minutesAvailable: true,
-      summary: "Discussed quarterly financial results and set KPIs for the next quarter.",
-      agenda: ["Introduction and Overview", "Financial Update", "Next Steps"],
-      discussionPoints: [
-        "Quarterly earnings and projections",
-        "KPIs for next quarter",
-        "Team objectives and milestones",
-      ],
-      actionItems: [
-        "Prepare financial report for next quarter",
-        "Follow up with the product team on milestones",
-      ],
-      notes: "Ensure all KPIs are tracked and reported in the next quarter's meeting.",
-    },
-  ];
+//   const recentMinutes: Meeting[] = [
+//     {
+//       id: 1,
+//       title: "Board Meeting",
+//       date: "March 15, 2024",
+//       time: "10:00 AM",
+//       host: "Jane Doe",
+//       attendees: ["Alice", "Bob", "Charlie"],
+//       minutesAvailable: true,
+//       summary: "Discussed quarterly financial results and set KPIs for the next quarter.",
+//       agenda: ["Introduction and Overview", "Financial Update", "Next Steps"],
+//       discussionPoints: [
+//         "Quarterly earnings and projections",
+//         "KPIs for next quarter",
+//         "Team objectives and milestones",
+//       ],
+//       actionItems: [
+//         "Prepare financial report for next quarter",
+//         "Follow up with the product team on milestones",
+//       ],
+//       notes: "Ensure all KPIs are tracked and reported in the next quarter's meeting.",
+//     },
+//   ];
 
   const toggleDropdown = (id: number) => {
     setDropdownOpen((prev) => (prev === id ? null : id));
@@ -245,20 +246,20 @@ export default function Dashboard() {
                   <thead>
                     <tr className="bg-gray-700">
                       <th className="px-4 py-2">Title</th>
-                      <th className="px-4 py-2">Minutes Status</th>
+                      <th className="px-4 py-2">Minutes Approved</th>
                       <th className="px-4 py-2">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {recentMinutes.map((minute) => (
-                      <tr key={minute.id} className="hover:bg-gray-700 transition">
-                        <td className="px-4 py-2">{minute.title}</td>
+                    {recentMinutes.map((meeting) => (
+                      <tr key={meeting.id} className="hover:bg-gray-700 transition">
+                        <td className="px-4 py-2">{meeting.title}</td>
                         <td className="px-4 py-2">
-                          {minute.minutesAvailable ? "Available" : "Not Available"}
+                          {meeting.minutesApproved ? "Approved" : "Not Approved"}
                         </td>
                         <td className="px-4 py-2 relative">
                           <button
-                            onClick={() => openModal(minute)} // Open Review Modal
+                            onClick={() => openModal(meeting)} // Open Review Modal
                             className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
                           >
                             Review
