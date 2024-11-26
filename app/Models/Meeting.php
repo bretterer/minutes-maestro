@@ -12,6 +12,11 @@ class Meeting extends Model
     use HasFactory;
     use HasUlids;
 
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+    ];
+
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);

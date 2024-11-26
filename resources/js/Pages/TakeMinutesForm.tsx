@@ -2,11 +2,40 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-export default function TakeMinutesForm({ onClose }: { onClose: () => void }) {
+type Meeting = {
+    id: number;
+    title: string;
+    date: string;
+    start_time: string;
+    end_time: string;
+    time: string;
+    host: string;
+    attendees: string[];
+    minutesAvailable?: boolean;
+    summary?: string;
+    agenda?: string[];
+    discussionPoints?: string[];
+    actionItems?: string[];
+    notes?: string;
+  };
+
+export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meeting, onClose: () => void }) {
   const [agenda, setAgenda] = useState("");
   const [discussionPoints, setDiscussionPoints] = useState("");
   const [actionItems, setActionItems] = useState("");
   const [notes, setNotes] = useState("");
+
+  const meetingTitle = meeting?.title || '';
+  let meetingStart = '';
+  let meetingEnd = '';
+if (meeting && meeting.start_time) {
+  meetingStart = new Date(meeting.start_time).toISOString().slice(0, 16) || '';
+}
+
+if (meeting && meeting.end_time) {
+  meetingEnd = new Date(meeting.end_time).toISOString().slice(0, 16) || '';
+}
+
 
   return (
     <div className="bg-gray-800 text-gray-100 rounded-lg shadow-lg p-8 max-w-4xl w-full">
@@ -26,6 +55,7 @@ export default function TakeMinutesForm({ onClose }: { onClose: () => void }) {
           id="title"
           placeholder="Enter meeting title"
           className="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:border-blue-500"
+          defaultValue={meetingTitle}
         />
       </div>
 
@@ -38,6 +68,7 @@ export default function TakeMinutesForm({ onClose }: { onClose: () => void }) {
           type="datetime-local"
           id="startTime"
           className="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:border-blue-500"
+          defaultValue={meetingStart}
         />
       </div>
 
@@ -50,6 +81,7 @@ export default function TakeMinutesForm({ onClose }: { onClose: () => void }) {
           type="datetime-local"
           id="endTime"
           className="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:border-blue-500"
+          defaultValue={meetingEnd}
         />
       </div>
 

@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Head, Link } from "@inertiajs/react";
+import { usePage, Head, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import Modal from "@/Components/Modal"; 
+import Modal from "@/Components/Modal";
 import TakeMinutesForm from "@/Pages/TakeMinutesForm";
-import ReviewMinutes from "@/Pages/ReviewMinuets"; 
-import CalendarModal from "@/Pages/PastMeetings"; 
+import ReviewMinutes from "@/Pages/ReviewMinuets";
+import CalendarModal from "@/Pages/PastMeetings";
+import CreateMeetingForm from "./Meetings/Partials/CreateMeetingForm";
 
 type Meeting = {
   id: number;
@@ -14,7 +15,7 @@ type Meeting = {
   host: string;
   attendees: string[];
   minutesAvailable?: boolean;
-  summary?: string; 
+  summary?: string;
   agenda?: string[];
   discussionPoints?: string[];
   actionItems?: string[];
@@ -22,35 +23,43 @@ type Meeting = {
 };
 
 export default function Dashboard() {
-  const [isTakeMinutesModalOpen, setTakeMinutesModalOpen] = useState(false); 
+  const { props } = usePage();
+  const [isCreateMeetingModalOpen, setCreateMeetingModalOpen] = useState(false);
+  const [isTakeMinutesModalOpen, setTakeMinutesModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete confirmation modal
   const [deleteConfirmationId, setDeleteConfirmationId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"upcoming" | "recent">("upcoming");
-  const [dropdownOpen, setDropdownOpen] = useState<number | null>(null); 
+  const [dropdownOpen, setDropdownOpen] = useState<number | null>(null);
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false); // State for Calendar Modal
   const [selectedMinute, setSelectedMinute] = useState<Meeting | null>(null); // State to hold selected meeting for review
+  const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
+
 
   const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
-  const upcomingMeetings: Meeting[] = [
-    {
-      id: 1,
-      title: "Team Sync",
-      date: "March 20, 2024",
-      time: "2:00 PM",
-      host: "John Doe",
-      attendees: ["Alice", "Bob", "Charlie"],
-    },
-    {
-      id: 2,
-      title: "Project Kickoff",
-      date: "March 22, 2024",
-      time: "10:00 AM",
-      host: "Sarah Smith",
-      attendees: ["Dave", "Eve", "Frank"],
-    },
-  ];
+  const upcomingMeetings = props.meetings as Meeting[];;
+
+//   const upcomingMeetings: Meeting[] = [
+
+//     {
+//       id: 1,
+//       title: "Team Sync",
+//       date: "March 20, 2024",
+//       time: "2:00 PM",
+//       host: "John Doe",
+//       attendees: ["Alice", "Bob", "Charlie"],
+//     },
+//     {
+//       id: 2,
+//       title: "Project Kickoff",
+//       date: "March 22, 2024",
+//       time: "10:00 AM",
+//       host: "Sarah Smith",
+//       attendees: ["Dave", "Eve", "Frank"],
+//     },
+
+//   ];
 
   const recentMinutes: Meeting[] = [
     {
@@ -83,6 +92,13 @@ export default function Dashboard() {
   const handleDelete = (id: number) => {
     setDeleteConfirmationId(id);
     setIsDeleteModalOpen(true); // Open delete confirmation modal
+    setDropdownOpen(null);
+  };
+
+  const handleTakeMinutes = (meeting: Meeting) => {
+    console.log("Taking minutes for meeting ID:", meeting.id);
+    setTakeMinutesModalOpen(true); // Open Take Minutes Modal
+    setSelectedMeeting(meeting); // Set the selected meeting
     setDropdownOpen(null);
   };
 
@@ -126,13 +142,13 @@ export default function Dashboard() {
 
           {/* Quick Actions */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <Link
-              href="/meetings/create"
+            <button
+              onClick={() => setCreateMeetingModalOpen(true)}
               className="flex flex-col items-center justify-center bg-gray-800 text-blue-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-blue-300 transform hover:scale-105 transition"
             >
               <i className="fas fa-calendar-plus text-4xl mb-2"></i>
               <span className="font-semibold">Create Meeting</span>
-            </Link>
+            </button>
             <button
               onClick={() => setTakeMinutesModalOpen(true)}
               className="flex flex-col items-center justify-center bg-gray-800 text-green-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-green-300 transform hover:scale-105 transition"
@@ -182,7 +198,6 @@ export default function Dashboard() {
                       <th className="px-4 py-2">Title</th>
                       <th className="px-4 py-2">Date</th>
                       <th className="px-4 py-2">Time</th>
-                      <th className="px-4 py-2">Host</th>
                       <th className="px-4 py-2">Actions</th>
                     </tr>
                   </thead>
@@ -192,8 +207,7 @@ export default function Dashboard() {
                         <td className="px-4 py-2">{meeting.title}</td>
                         <td className="px-4 py-2">{meeting.date}</td>
                         <td className="px-4 py-2">{meeting.time}</td>
-                        <td className="px-4 py-2">{meeting.host}</td>
-                        <td
+                       <td
                           className="px-4 py-2 relative"
                           ref={(el) =>
                             dropdownRefs.current.set(meeting.id, el as HTMLDivElement)
@@ -209,7 +223,7 @@ export default function Dashboard() {
                             <div className="absolute mt-2 w-40 bg-gray-700 shadow-lg rounded-md z-10">
                               <button
                                 className="block w-full text-left px-4 py-2 hover:bg-gray-600"
-                                onClick={() => setTakeMinutesModalOpen(true)} // Open Take Minutes Modal
+                                onClick={() => handleTakeMinutes(meeting)} // Open Take Minutes Modal
                               >
                                 Take Minutes
                               </button>
@@ -285,10 +299,10 @@ export default function Dashboard() {
 
       {/* Modal for Calendar to review past minutes */}
       {isCalendarModalOpen && (
-        <CalendarModal 
-          isOpen={isCalendarModalOpen} 
-          onClose={() => setIsCalendarModalOpen(false)} 
-          meetings={upcomingMeetings} 
+        <CalendarModal
+          isOpen={isCalendarModalOpen}
+          onClose={() => setIsCalendarModalOpen(false)}
+          meetings={upcomingMeetings}
           onMeetingSelect={(meeting) => {
             console.log(meeting); // Handle meeting selection
             setIsCalendarModalOpen(false);
@@ -303,8 +317,29 @@ export default function Dashboard() {
 
       {/* Modal for Take Minutes */}
       {isTakeMinutesModalOpen && (
-        <Modal isOpen={isTakeMinutesModalOpen} onClose={() => setTakeMinutesModalOpen(false)}>
-          <TakeMinutesForm onClose={() => setTakeMinutesModalOpen(false)} />
+        <Modal
+            isOpen={isTakeMinutesModalOpen}
+            onClose={() => {
+                setTakeMinutesModalOpen(false);
+                setSelectedMeeting(null);
+            }}>
+          <TakeMinutesForm
+            meeting={selectedMeeting}
+            onClose={() => setTakeMinutesModalOpen(false)} />
+        </Modal>
+      )}
+
+
+
+      {/* Modal for Take Minutes */}
+      {isCreateMeetingModalOpen && (
+        <Modal
+            isOpen={isCreateMeetingModalOpen}
+            onClose={() => {
+                setCreateMeetingModalOpen(false);
+            }}>
+          <CreateMeetingForm
+            onClose={() => setCreateMeetingModalOpen(false)} />
         </Modal>
       )}
     </AuthenticatedLayout>

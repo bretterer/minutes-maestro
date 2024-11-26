@@ -10,9 +10,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import classNames from 'classnames';
 
-export default function CreateMeetingForm() {
-  const route = useRoute();
-  const page = useTypedPage();
+export default function CreateMeetingForm({onClose}: {onClose: () => void }) {
   const form = useForm({
     name: '',
     start_time: '',
@@ -25,6 +23,93 @@ export default function CreateMeetingForm() {
       preserveScroll: true,
     });
   }
+
+
+
+  return (
+    <div className="bg-gray-800 text-gray-100 rounded-lg shadow-lg p-8 max-w-4xl w-full">
+      <link rel="stylesheet" type="text/css" href="/css/QuillCustom.css" />
+
+      <h3 className="text-3xl font-semibold text-gray-100 mb-6">
+        Create a meeting
+      </h3>
+
+      {/* Title */}
+      <div className="mb-4">
+        <label className="block text-gray-300 font-bold mb-2" htmlFor="title">
+          Title
+        </label>
+        <input
+          type="text"
+          id="title"
+          placeholder="Enter meeting title"
+          className="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:border-blue-500"
+        />
+      </div>
+
+      {/* Start Time */}
+      <div className="mb-4">
+        <label className="block text-gray-300 font-bold mb-2" htmlFor="startTime">
+          Start Time
+        </label>
+        <input
+          type="datetime-local"
+          id="startTime"
+          className="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:border-blue-500"
+        />
+      </div>
+
+      {/* End Time */}
+      <div className="mb-4">
+        <label className="block text-gray-300 font-bold mb-2" htmlFor="endTime">
+          End Time
+        </label>
+        <input
+          type="datetime-local"
+          id="endTime"
+          className="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:border-blue-500"
+        />
+      </div>
+
+      {/* Committees */}
+      <div className="mb-4">
+        <label className="block text-gray-300 font-bold mb-2" htmlFor="endTime">
+          Include Committees
+        </label>
+        <select multiple id="committees"
+          className="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:border-blue-500">
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+            <option value="option4">Option 4</option>
+        </select>
+      </div>
+
+      {/* Buttons */}
+      <div className="flex justify-end mt-8">
+        <button
+          onClick={onClose}
+          className="bg-gray-600 text-gray-200 py-3 px-6 rounded-lg shadow-md mr-4 hover:bg-gray-700 focus:outline-none"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          className="bg-blue-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none"
+        >
+          Save Minutes
+        </button>
+      </div>
+    </div>
+)
+
+
+
+
+
+
+
+
 
   return (
     <FormSection
