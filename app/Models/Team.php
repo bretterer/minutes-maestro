@@ -51,4 +51,9 @@ class Team extends JetstreamTeam
     {
         return $this->hasMany(Meeting::class);
     }
+
+    public function committees(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Committee::class);
+    }
 }

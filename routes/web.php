@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Models\Meeting;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -36,6 +38,43 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         return Inertia::render('TakeMinutesForm');
     })->name('take-minutes');
+
+
+    Route::post('/meetings', function (Request $request) {
+        $request->validate([
+            'name' => 'required',
+            'start_time' => 'required|date',
+            'end_time' => 'required|date|after:start_time',
+        ]);
+
+        $meeting = new Meeting();
+        $meeting->name = $request->name;
+        $meeting->start_time = $request->start_time;
+        $meeting->end_time = $request->end_time;
+
+        $createdMeeting = auth()->user()->currentTeam->meetings()->save($meeting);
+
+        // associate committees with meeting
+        $committees = $request->committees ?? [];
+        $createdMeeting->committees()->sync($committees);
+
+
+        return response()->json($meeting, 201);
+
+    })->name('meetings.store');
+
+
+    Route::post('meetings/{meeting}/minutes', function (Meeting $meeting, Request $request) {
+        // foreach committeeMinutes, save as a note
+        foreach ($request->committeeMinutes as $committeeMinutes) {
+            $meeting->notes()->create([
+                'content' => $committeeMinutes['content'],
+                'committee_id' => $committeeMinutes['committee_id'],
+                'user_id' => auth()->id(),
+            ]);
+        }
+        return response()->json($meeting->minutes, 201);
+    })->name('minutes.store');
 
 
 });

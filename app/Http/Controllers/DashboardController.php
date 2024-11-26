@@ -11,6 +11,7 @@ class DashboardController extends Controller
         $meetings = auth()->user()->currentTeam->meetings;
 
         $meetings->map(function ($meeting) {
+            $meeting->load('team.committees');
             $meeting->title = $meeting->name;
             $meeting->date = $meeting->start_time->format('M d, Y');
             $meeting->time = $meeting->start_time->format('h:i A');
@@ -20,8 +21,10 @@ class DashboardController extends Controller
             return $meeting;
         });
 
+
+
         return Inertia::render('Dashboard', [
-            'meetings' => $meetings
+            'meetings' => $meetings,
         ]);
     }
 }

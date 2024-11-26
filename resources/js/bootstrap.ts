@@ -13,6 +13,8 @@ window._ = _;
 
 (window as any).axios.defaults.headers.common['X-Requested-With'] =
   'XMLHttpRequest';
+(window as any).axios.defaults.withCredentials = true;
+(window as any).axios.defaults.withXSRFToken = true;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
