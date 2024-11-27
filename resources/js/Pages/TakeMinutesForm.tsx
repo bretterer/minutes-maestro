@@ -64,6 +64,7 @@ export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meetin
 
 
         };
+
         fetchCommittees();
     }, [meeting?.id]);
 
