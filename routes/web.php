@@ -6,6 +6,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Spatie\LaravelPdf\Facades\Pdf;
+use function Spatie\LaravelPdf\Support\pdf;
 
 // Landing Page
 Route::get('/', function () {
@@ -76,5 +78,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         return response()->json($meeting->minutes, 201);
     })->name('minutes.store');
 
+
+    Route::get('meetings/{meeting}/pdf', function (Meeting $meeting) {
+        // return view('pdfs.meeting', ['meeting' => $meeting]);
+        return pdf()->view('pdfs.meeting', ['meeting' => $meeting])
+            ->headerHtml('<div>My header</div>')
+            ->footerHtml('<div>My footer</div>')
+            ->name("{$meeting->name}.pdf")
+            ->download();
+
+    })->name('minutes.pdf');
 
 });

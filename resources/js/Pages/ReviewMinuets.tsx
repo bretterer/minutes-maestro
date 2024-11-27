@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaPencilAlt, FaEnvelope, FaPrint } from "react-icons/fa";
+import { FaPencilAlt, FaEnvelope, FaPrint, FaFilePdf } from "react-icons/fa";
 
 interface Meeting {
     id: string;
@@ -76,6 +76,11 @@ export default function ReviewMinuets({ meeting, onClose }: ReviewMinutesModalPr
         }
     };
 
+    const handlePdf = () => {
+        // open new tab with pdf url
+        window.open(`/meetings/${meeting.id}/pdf`, "_blank");
+    };
+
     return (
         <div
             className="fixed inset-0 bg-gray-800 bg-opacity-60 flex justify-center items-center z-50"
@@ -92,17 +97,19 @@ export default function ReviewMinuets({ meeting, onClose }: ReviewMinutesModalPr
 
                     {/* Icons for actions */}
                     <div className="flex space-x-4 mt-4 mb-4">
+                        {!meeting.minutesApproved ? (
                         <button
                             className="text-blue-500"
                             onClick={() => setIsEditingNotes(!isEditingNotes)}
                         >
-                            <FaPencilAlt className="text-lg" />
+                            <FaPencilAlt className="text-xl" />
                         </button>
+                        ): null}
                         <button className="text-green-500" onClick={handleShare}>
-                            <FaEnvelope className="text-lg" />
+                            <FaEnvelope className="text-xl" />
                         </button>
-                        <button className="text-yellow-500" onClick={handlePrint}>
-                            <FaPrint className="text-lg" />
+                        <button className="text-yellow-500" onClick={handlePdf}>
+                            <FaFilePdf className="text-xl" />
                         </button>
                     </div>
 
