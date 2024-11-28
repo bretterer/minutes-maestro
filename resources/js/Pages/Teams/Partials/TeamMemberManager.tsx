@@ -317,12 +317,12 @@ export default function TeamMemberManager({
           {/* <!-- Manage Team Members --> */}
           <div className="mt-10 sm:mt-0" />
 
-          <ActionSection
+          <AltActionSection
             title={'Team Members'}
             description={'All of the people that are part of this team.'}
           >
             {/* <!-- Team Member List --> */}
-            <div className="space-y-6">
+            <div className="space-y-6 text-black">
               {team.users.map(user => (
                 <div
                   className="flex items-center justify-between"
@@ -376,7 +376,7 @@ export default function TeamMemberManager({
                 </div>
               ))}
             </div>
-          </ActionSection>
+          </AltActionSection>
         </div>
       ) : null}
 
