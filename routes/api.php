@@ -1,8 +1,10 @@
 <?php
 
+use App\Mail\MeetingShare;
 use App\Models\Committee;
 use App\Models\Meeting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
@@ -71,4 +73,21 @@ Route::get('/user/teams', function () {
     });
 
     return $teams;
+})->middleware('auth:sanctum');
+
+
+Route::post('/meetings/{meeting}/send', function (Meeting $meeting) {
+
+    //get all members of the team for the meeting
+    $members = $meeting->team->allUsers();
+    $mail = new MeetingShare($meeting);
+
+    //send email to each member
+    foreach ($members as $member) {
+        Mail::to($member->email)->send($mail);
+    }
+
+
+    return response()->json(['message' => 'Minutes sent', 'success' => true]);
+
 })->middleware('auth:sanctum');

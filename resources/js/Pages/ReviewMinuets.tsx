@@ -55,14 +55,20 @@ export default function ReviewMinuets({ meeting, onClose }: ReviewMinutesModalPr
     };
 
 
-    const handleShare = () => {
-        // Create the mailto link to share the notes via email
-        const subject = encodeURIComponent(`Meeting Notes: ${meeting.title}`);
-        const body = encodeURIComponent(`Here are the meeting notes for "${meeting.title}":\n\n${meeting.notes}`);
-        const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
+    const handleShare = async () => {
+        try {
+            const response = await window.axios.post(`/api/meetings/${meeting.id}/send`)
+            .then((response) => {
+                console.log(response);
+                // Logic to show a success message or error message
+                if(response.data.success) {
+                    alert('Meeting minutes shared successfully');
+                }
+            });
 
-        // Open the email client
-        window.location.href = mailtoLink;
+        } catch (error) {
+            console.error('Error approving minutes:', error);
+        }
     };
 
     const handlePrint = () => {
@@ -105,7 +111,7 @@ export default function ReviewMinuets({ meeting, onClose }: ReviewMinutesModalPr
                             <FaPencilAlt className="text-xl" />
                         </button>
                         ): null}
-                        <button className="text-green-500" onClick={handleShare}>
+                        <button className="text-green-500" onClick={() => handleShare()}>
                             <FaEnvelope className="text-xl" />
                         </button>
                         <button className="text-yellow-500" onClick={handlePdf}>
