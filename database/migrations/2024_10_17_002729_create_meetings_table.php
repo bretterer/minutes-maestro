@@ -17,6 +17,7 @@ return new class extends Migration
             $table->dateTime('start_time');
             $table->dateTime('end_time')->nullable();
             $table->foreignId('team_id')->constrained();
+            $table->boolean('minutes_approved')->default(false);
             $table->timestamps();
         });
     }

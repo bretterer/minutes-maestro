@@ -13,9 +13,14 @@ class Committee extends Model
     use HasFactory;
     use HasUlids;
 
-    public function organization(): BelongsTo
+    /**
+     * Get all of the notes for the Committee
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function notes(): HasMany
     {
-        return $this->belongsTo(Organization::class);
+        return $this->hasMany(Note::class);
     }
 
 }

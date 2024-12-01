@@ -17,6 +17,11 @@ class Note extends Model
         return $this->belongsTo(Meeting::class);
     }
 
+    public function committee(): BelongsTo
+    {
+        return $this->belongsTo(Committee::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
