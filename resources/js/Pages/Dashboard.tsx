@@ -8,6 +8,8 @@ import CalendarModal from "@/Pages/PastMeetings";
 import CreateMeetingForm from "./Meetings/Partials/CreateMeetingForm";
 import CommitteesModal from "./Modals/CommitteesModal";
 import ManageTeamModal from "./Modals/ManageTeamModal";
+import Show from "./Teams/Show";
+import { JetstreamTeamPermissions, Role, Team } from "@/types";
 
 type Meeting = {
     id: number;
@@ -44,6 +46,9 @@ export default function Dashboard() {
 
     const upcomingMeetings = props.meetings as Meeting[];
     const recentMinutes = props.recentMeetings as Meeting[];
+    const availableRoles = props.availableRoles as Role[]
+    const permissions = props.permissions as JetstreamTeamPermissions
+    const team = props.team as any
 
     const toggleDropdown = (id: number) => {
         setDropdownOpen((prev) => (prev === id ? null : id));
@@ -274,7 +279,7 @@ export default function Dashboard() {
             )}
 
             {/* Modal for Take Minutes */}
-            {isTakeMinutesModalOpen && (
+            {isTakeMinutesModalOpen && selectedMeeting && (
                 <Modal
                     isOpen={isTakeMinutesModalOpen}
                     onClose={() => {
@@ -322,9 +327,9 @@ export default function Dashboard() {
                         setManageTeamModalOpen(false);
                     }}>
                     <ManageTeamModal
-                        team={props.team}
-                        availableRoles={props.availableRoles}
-                        permissions={props.permissions}
+                        team={team}
+                        availableRoles={availableRoles}
+                        permissions={permissions}
                         onClose={() => setManageTeamModalOpen(false)} />
                 </Modal>
             )}

@@ -13,8 +13,8 @@ interface Team {
     name?: string;
     currentTeam?: boolean;
     personal_team: boolean;
-    created_at: DateTime;
-    updated_at: DateTime;
+    created_at: Date;
+    updated_at: Date;
 }
 
 interface Props {
