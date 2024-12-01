@@ -1,44 +1,68 @@
-import { Head, Link } from '@inertiajs/react';
+import React from "react";
+import { Head, Link } from "@inertiajs/react";
 
-export default function Welcome({ auth }) {
+interface Auth {
+    user?: {
+        name: string;
+        email: string;
+    };
+}
+
+export default function Welcome({ auth }: { auth: Auth }) {
+    const testimonials = [
+        {
+            name: "Andrew Hopkins",
+            role: "Manager",
+            feedback: "Minutes Maestro has transformed the way we manage our meetings!",
+            image: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?crop=faces&fit=crop&w=200&q=80",
+        },
+        {
+            name: "John Smith",
+            role: "Team Lead",
+            feedback: "An intuitive tool that saves us hours of work every week.",
+            image: "https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://fdczvxmwwjwpwbeeqcth.supabase.co/storage/v1/object/public/images/50dab922-5d48-4c6b-8725-7fd0755d9334/3a3f2d35-8167-4708-9ef0-bdaa980989f9.png",
+        },
+        {
+            name: "Sarah Lee",
+            role: "Coordinator",
+            feedback: "I love how easy it is to distribute polished meeting notes.",
+            image: "https://writestylesonline.com/wp-content/uploads/2019/01/What-To-Wear-For-Your-Professional-Profile-Picture-or-Headshot.jpg",
+        },
+    ];
+
     return (
         <>
             <Head title="Minutes Maestro" />
-            <div className="bg-gray-100 min-h-screen text-gray-900">
+            <div className="bg-gray-50 text-gray-900">
                 {/* Navbar */}
-                <header className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
-                    <div className="container mx-auto flex items-center justify-between px-6 py-4">
-                        <div className="text-2xl font-semibold">
-                            Minutes Maestro
-                        </div>
+                <header className="fixed top-0 left-0 w-full z-50">
+                    <div className="container mx-auto flex items-center justify-between px-6 py-4 text-white">
+                        <div className="text-2xl font-bold">Minutes Maestro</div>
                         <nav className="space-x-6">
-                            <a href="#features" className="hover:text-blue-600">
+                            <a href="#features" className="hover:text-gray-300 smooth-scroll">
                                 Features
                             </a>
-                            <a href="#roles" className="hover:text-blue-600">
-                                Roles
-                            </a>
-                            <a href="#contact" className="hover:text-blue-600">
-                                Contact
+                            <a href="#testimonials" className="hover:text-gray-300 smooth-scroll">
+                                Testimonials
                             </a>
                             {auth.user ? (
                                 <Link
-                                    href={route('dashboard')}
-                                    className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                                    href={route("dashboard")}
+                                    className="px-4 py-2 rounded-md bg-white text-blue-800 font-semibold hover:bg-gray-100 transition"
                                 >
                                     Dashboard
                                 </Link>
                             ) : (
                                 <>
                                     <Link
-                                        href={route('login')}
+                                        href={route("login")}
                                         className="px-4 py-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 transition"
                                     >
                                         Log in
                                     </Link>
                                     <Link
-                                        href={route('register')}
-                                        className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                                        href={route("register")}
+                                        className="px-4 py-2 rounded-md bg-white text-blue-800 font-semibold hover:bg-gray-100 transition"
                                     >
                                         Get Started
                                     </Link>
@@ -49,141 +73,100 @@ export default function Welcome({ auth }) {
                 </header>
 
                 {/* Hero Section */}
-                <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 to-white pt-20">
-                    <div className="text-center px-6">
-                        <h1 className="text-5xl font-bold tracking-tight text-black">
+                <div className="relative flex flex-col lg:flex-row items-center justify-between min-h-screen px-6 lg:px-16 bg-gradient-to-r from-blue-700 via-indigo-700 to-indigo-600 text-white">
+                    <div className="max-w-md text-center lg:text-left lg:mr-12">
+                        <h1 className="text-5xl font-extrabold leading-tight">
                             Simplify Your Meetings
                         </h1>
-                        <p className="mt-4 text-lg text-gray-700">
+                        <p className="mt-4 text-lg text-gray-300">
                             Capture, organize, and distribute your meeting minutes seamlessly.
                         </p>
-                        <div className="mt-8 flex justify-center gap-4">
+                        <div className="mt-8">
                             {auth.user ? (
                                 <Link
-                                    href={route('dashboard')}
-                                    className="px-8 py-3 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                                    href={route("dashboard")}
+                                    className="px-8 py-3 rounded-md bg-white text-blue-700 font-semibold hover:bg-gray-100 transition"
                                 >
                                     Go to Dashboard
                                 </Link>
                             ) : (
-                                <>
-                                    <Link
-                                        href={route('register')}
-                                        className="px-8 py-3 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
-                                    >
-                                        Get Started
-                                    </Link>
-                                </>
+                                <Link
+                                    href={route("register")}
+                                    className="px-8 py-3 rounded-md bg-white text-blue-700 font-semibold hover:bg-gray-100 transition"
+                                >
+                                    Get Started
+                                </Link>
                             )}
                         </div>
+                    </div>
+                    <div>
+                        <img
+                            src="https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            alt="Business Meeting"
+                            className="max-w-[800px] w-full h-auto rounded-lg shadow-lg"
+                        />
                     </div>
                 </div>
 
                 {/* Features Section */}
-                <div id="features" className="py-16 bg-white">
+                <div id="features" className="min-h-screen bg-gray-900 text-white flex items-center">
                     <div className="container mx-auto px-6">
-                        <h2 className="text-3xl font-semibold text-center text-gray-900">
-                            Key Features
-                        </h2>
-                        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-                            {/* Feature Cards */}
-                            <div className="p-6 bg-gray-50 rounded-lg shadow-md hover:shadow-lg transition">
-                                <h3 className="text-xl font-semibold text-gray-800">
-                                    Meeting Setup
-                                </h3>
-                                <p className="mt-2 text-gray-600">
-                                    Schedule meetings, add attendees, and create agendas effortlessly.
-                                </p>
-                            </div>
-                            <div className="p-6 bg-gray-50 rounded-lg shadow-md hover:shadow-lg transition">
-                                <h3 className="text-xl font-semibold text-gray-800">
-                                    Minute Taking
-                                </h3>
-                                <p className="mt-2 text-gray-600">
-                                    Capture notes in real-time using customizable templates.
-                                </p>
-                            </div>
-                            <div className="p-6 bg-gray-50 rounded-lg shadow-md hover:shadow-lg transition">
-                                <h3 className="text-xl font-semibold text-gray-800">
-                                    Review & Distribution
-                                </h3>
-                                <p className="mt-2 text-gray-600">
-                                    Generate and distribute polished meeting minutes automatically.
-                                </p>
-                            </div>
-                            <div className="p-6 bg-gray-50 rounded-lg shadow-md hover:shadow-lg transition">
-                                <h3 className="text-xl font-semibold text-gray-800">
-                                    Account Management
-                                </h3>
-                                <p className="mt-2 text-gray-600">
-                                    Create accounts, manage organizations, and control user roles.
-                                </p>
-                            </div>
+                        <h2 className="text-4xl font-extrabold text-center">Key Features</h2>
+                        <p className="mt-4 text-lg text-center text-gray-300">
+                            Everything you need to streamline your meetings.
+                        </p>
+                        <div className="mt-12 grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+                            {[{ title: "Meeting Setup", description: "Schedule meetings effortlessly.", icon: "📅" },
+                                { title: "Minute Taking", description: "Capture notes in real-time.", icon: "📝" },
+                                { title: "Review & Distribution", description: "Generate polished notes.", icon: "📤" },
+                                { title: "Account Management", description: "Manage roles and teams.", icon: "👥" }].map((feature, index) => (
+                                    <div key={index} className="p-8 bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition text-center">
+                                        <div className="text-4xl">{feature.icon}</div>
+                                        <h3 className="mt-4 text-xl font-bold">{feature.title}</h3>
+                                        <p className="mt-2">{feature.description}</p>
+                                    </div>
+                            ))}
                         </div>
                     </div>
                 </div>
 
-                {/* User Roles Section */}
-                <div id="roles" className="py-16 bg-gray-100">
-                    <div className="container mx-auto px-6">
-                        <h2 className="text-3xl font-semibold text-center text-gray-900">
-                            User Roles and Access Control
-                        </h2>
-                        <p className="mt-4 text-center text-gray-700">
-                            Minutes Maestro offers distinct user roles with varying levels of access.
-                        </p>
-                        <div className="mt-12 overflow-x-auto">
-                            <table className="w-full text-left table-auto border-collapse">
-                                <thead>
-                                    <tr>
-                                        <th className="px-4 py-2 border-b-2">Action</th>
-                                        <th className="px-4 py-2 border-b-2">Administrator</th>
-                                        <th className="px-4 py-2 border-b-2">Secretary</th>
-                                        <th className="px-4 py-2 border-b-2">User</th>
-                                        <th className="px-4 py-2 border-b-2">Guest</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <tr>
-                                        <td className="px-4 py-2 border-b">
-                                            Add Committee Notes
-                                        </td>
-                                        <td className="px-4 py-2 border-b text-center">✅</td>
-                                        <td className="px-4 py-2 border-b text-center">✅</td>
-                                        <td className="px-4 py-2 border-b text-center">
-                                            ❗ (Own Committee)
-                                        </td>
-                                        <td className="px-4 py-2 border-b text-center">❌</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 border-b">
-                                            Create Meeting
-                                        </td>
-                                        <td className="px-4 py-2 border-b text-center">✅</td>
-                                        <td className="px-4 py-2 border-b text-center">✅</td>
-                                        <td className="px-4 py-2 border-b text-center">❌</td>
-                                        <td className="px-4 py-2 border-b text-center">❌</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                {/* Testimonials Section */}
+                <div id="testimonials" className="min-h-screen bg-gray-900 text-white flex items-center">
+                    <div className="container mx-auto px-6 text-center">
+                        <h2 className="text-4xl font-extrabold">What Our Users Say</h2>
+                        <p className="mt-4 text-lg text-gray-300">Trusted by professionals worldwide.</p>
+                        <div className="mt-12 grid gap-8 md:grid-cols-3">
+                            {testimonials.map((testimonial, index) => (
+                                <div key={index} className="p-8 bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition">
+                                    <p className="italic">"{testimonial.feedback}"</p>
+                                    <div className="mt-4 flex items-center justify-center">
+                                        <img
+                                            src={testimonial.image}
+                                            alt={testimonial.name}
+                                            className="h-16 w-16 rounded-full shadow-md"
+                                        />
+                                        <div className="ml-4">
+                                            <p className="font-bold">{testimonial.name}</p>
+                                            <p className="text-sm">{testimonial.role}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
 
                 {/* Call-to-Action Section */}
-                <div className="py-16 bg-white">
-                    <div className="container mx-auto px-6 text-center">
-                        <h2 className="text-3xl font-semibold text-gray-900">
-                            Ready to Simplify Your Meetings?
-                        </h2>
-                        <p className="mt-4 text-gray-700">
-                            Sign up today and experience the efficiency of Minutes Maestro.
+                <div id="contact" className="min-h-screen bg-gray-900 text-white flex items-center text-center">
+                    <div className="container mx-auto px-6">
+                        <h2 className="text-5xl font-extrabold">Ready to Simplify Your Meetings?</h2>
+                        <p className="mt-4 text-lg">
+                            Sign up today and experience the difference.
                         </p>
                         <div className="mt-8">
                             <Link
-                                href={route('register')}
-                                className="px-8 py-3 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                                href={route("register")}
+                                className="px-8 py-3 rounded-md bg-white text-blue-700 font-semibold hover:bg-gray-100 transition"
                             >
                                 Get Started
                             </Link>
@@ -192,18 +175,10 @@ export default function Welcome({ auth }) {
                 </div>
 
                 {/* Footer */}
-                <footer
-                    id="contact"
-                    className="py-6 bg-gray-200 text-center text-gray-600"
-                >
-                    <p className="text-sm">
-                        © 2024 Minutes Maestro. All rights reserved.
-                    </p>
+                <footer className="py-8 bg-gray-900 text-gray-300 text-center">
+                    <p className="text-sm">© 2024 Minutes Maestro. All rights reserved.</p>
                     <p className="mt-2">
-                        <a
-                            href="mailto:support@minutesmaestro.com"
-                            className="hover:text-blue-600"
-                        >
+                        <a href="mailto:support@minutesmaestro.com" className="hover:text-gray-100">
                             support@minutesmaestro.com
                         </a>
                     </p>

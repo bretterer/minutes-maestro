@@ -67,10 +67,10 @@ class User extends Authenticatable
         ];
     }
 
-    public function meetings(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Meeting::class);
-    }
+    // public function meetings(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    // {
+    //     return $this->hasManyThrough(Meeting::class, MeetingUser::class, 'user_id', 'id', 'id', 'meeting_id');
+    // }
 
 
 }

@@ -94,3 +94,18 @@ export interface TeamInvitation {
   created_at: DateTime;
   updated_at: DateTime;
 }
+
+export interface Meeting {
+    id: number;
+    title: string;
+    date: string;
+    time: string;
+    host: string;
+    attendees: string[];
+    minutesAvailable?: boolean;
+    summary?: string;
+    agenda?: string[];
+    discussionPoints?: string[];
+    actionItems?: string[];
+    notes?: string;
+  };

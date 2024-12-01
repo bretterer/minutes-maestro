@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('committees', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('name');
-            $table->foreignId('organization_id')->constrained();
+            $table->foreignId('team_id')->constrained();
             $table->timestamps();
         });
     }

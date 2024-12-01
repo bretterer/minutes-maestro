@@ -24,6 +24,9 @@ import { router } from '@inertiajs/core';
 import { useForm } from '@inertiajs/react';
 import classNames from 'classnames';
 import React, { useState } from 'react';
+import SectionTitle from '@/Components/SectionTitle';
+import AltFormSection from '@/Components/AltFormSection';
+import AltActionSection from '@/Components/AltActionSection';
 
 interface UserMembership extends User {
   membership: {
@@ -132,7 +135,17 @@ export default function TeamMemberManager({
           <SectionBorder />
 
           {/* <!-- Add Team Member --> */}
-          <FormSection
+          {/* <div className="md:col-span-1">
+            <div className="px-4 sm:px-0">
+              <h3 className="text-lg font-medium text-white">
+                Add Team Member
+              </h3>
+
+              <p className="mt-1 text-sm text-gray-300"></p>
+            </div>
+          </div> */}
+
+          <AltFormSection
             onSubmit={addTeamMember}
             title={'Add Team Member'}
             description={
@@ -166,7 +179,7 @@ export default function TeamMemberManager({
             </div>
 
             {/* <!-- Member Email --> */}
-            <div className="col-span-6 sm:col-span-4">
+            <div className="col-span-6 sm:col-span-4 text-black">
               <InputLabel htmlFor="email" value="Email" />
               <TextInput
                 id="email"
@@ -192,14 +205,14 @@ export default function TeamMemberManager({
                   className="mt-2"
                 />
 
-                <div className="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
+                <div className="relative z-0 mt-1 border border-blue-400 rounded-lg cursor-pointer">
                   {availableRoles.map((role, i) => (
                     <button
                       type="button"
                       className={classNames(
                         'relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500',
                         {
-                          'border-t border-gray-200 focus:border-none rounded-t-none':
+                          'border-t border-blue-400 focus:border-none rounded-t-none':
                             i > 0,
                           'rounded-b-none':
                             i != Object.keys(availableRoles).length - 1,
@@ -220,13 +233,10 @@ export default function TeamMemberManager({
                         {/* <!-- Role Name --> */}
                         <div className="flex items-center">
                           <div
-                            className={classNames(
-                              'text-sm text-gray-600',
-                              {
-                                'font-semibold':
-                                  addTeamMemberForm.data.role == role.key,
-                              },
-                            )}
+                            className={classNames('text-sm text-gray-600', {
+                              'font-semibold':
+                                addTeamMemberForm.data.role == role.key,
+                            })}
                           >
                             {role.name}
                           </div>
@@ -256,7 +266,7 @@ export default function TeamMemberManager({
                 </div>
               </div>
             ) : null}
-          </FormSection>
+          </AltFormSection>
         </div>
       ) : null}
 
@@ -267,7 +277,7 @@ export default function TeamMemberManager({
           {/* <!-- Team Member Invitations --> */}
           <div className="mt-10 sm:mt-0" />
 
-          <ActionSection
+          <AltActionSection
             title={'Pending Team Invitations'}
             description={
               'These people have been invited to your team and have been sent an invitation email. They may join the team by accepting the email invitation.'
@@ -280,9 +290,7 @@ export default function TeamMemberManager({
                   className="flex items-center justify-between"
                   key={invitation.id}
                 >
-                  <div className="text-gray-600">
-                    {invitation.email}
-                  </div>
+                  <div className="text-gray-600">{invitation.email}</div>
 
                   <div className="flex items-center">
                     {/* <!-- Cancel Team Invitation --> */}
@@ -298,7 +306,7 @@ export default function TeamMemberManager({
                 </div>
               ))}
             </div>
-          </ActionSection>
+          </AltActionSection>
         </div>
       ) : null}
 
@@ -309,12 +317,12 @@ export default function TeamMemberManager({
           {/* <!-- Manage Team Members --> */}
           <div className="mt-10 sm:mt-0" />
 
-          <ActionSection
+          <AltActionSection
             title={'Team Members'}
             description={'All of the people that are part of this team.'}
           >
             {/* <!-- Team Member List --> */}
-            <div className="space-y-6">
+            <div className="space-y-6 text-black">
               {team.users.map(user => (
                 <div
                   className="flex items-center justify-between"
@@ -368,7 +376,7 @@ export default function TeamMemberManager({
                 </div>
               ))}
             </div>
-          </ActionSection>
+          </AltActionSection>
         </div>
       ) : null}
 
@@ -406,13 +414,10 @@ export default function TeamMemberManager({
                     {/* <!-- Role Name --> */}
                     <div className="flex items-center">
                       <div
-                        className={classNames(
-                          'text-sm text-gray-600',
-                          {
-                            'font-semibold':
-                              updateRoleForm.data.role === role.key,
-                          },
-                        )}
+                        className={classNames('text-sm text-gray-600', {
+                          'font-semibold':
+                            updateRoleForm.data.role === role.key,
+                        })}
                       >
                         {role.name}
                       </div>

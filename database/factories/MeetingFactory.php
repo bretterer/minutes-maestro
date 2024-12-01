@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Organization;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,13 +18,13 @@ class MeetingFactory extends Factory
      */
     public function definition(): array
     {
-        $startTime = $this->faker->dateTimeBetween('now', '+1 year');
-        $endTime = $this->faker->optional(weight: 0.8, default: null)->clone($startTime)->addMinutes(array_rand([30, 60, 90, 120]));
+        $startTime = now()->createFromDate($this->faker->dateTimeBetween('now', '+1 year'));
+        $endTime = $startTime->clone()->addMinutes(array_rand([30, 60, 90, 120]));
         return [
             'name' => $this->faker->sentence,
             'start_time' => $startTime,
             'end_time' => $endTime,
-            'organizaiton_id' => Organization::factory(),
+            'team_id' => Team::factory(),
         ];
     }
 }

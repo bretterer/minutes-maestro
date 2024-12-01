@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Organization;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,7 @@ class CommitteeFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'organization_id' => Organization::factory(),
+            'team_id' => Team::factory(),
         ];
     }
 }

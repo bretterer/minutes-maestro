@@ -1,14 +1,15 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\MeetingsController;
+use App\Models\Meeting;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-Route::get('info', function () {
-    return phpinfo();
-});
+use Spatie\LaravelPdf\Facades\Pdf;
+use function Spatie\LaravelPdf\Support\pdf;
 
+// Landing Page
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -18,10 +19,74 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
+// Authenticated Routes
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+
+    // Dashboard Route
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/meetings/create', [MeetingsController::class, 'create'])->name('meetings.create');
-    Route::post('/meetings', [MeetingsController::class, 'store'])->name('meetings.store');
+    // Review Minutes (Static View)
+    Route::get('/review-minutes', function () {
+        return Inertia::render('ReviewMinutes');
+    })->name('review-minutes');
+
+    // Review Minutes by ID
+    Route::get('/review-minutes/{id}', function ($id) {
+        return Inertia::render('ReviewMinutes', ['id' => $id]);
+    })->name('review-minutes-id');
+
+    // Take Minutes Form Route
+    Route::get('/take-minutes', function () {
+
+        return Inertia::render('TakeMinutesForm');
+    })->name('take-minutes');
+
+
+    Route::post('/meetings', function (Request $request) {
+        $request->validate([
+            'name' => 'required',
+            'start_time' => 'required|date',
+            'end_time' => 'required|date|after:start_time',
+        ]);
+
+        $meeting = new Meeting();
+        $meeting->name = $request->name;
+        $meeting->start_time = $request->start_time;
+        $meeting->end_time = $request->end_time;
+
+        $createdMeeting = auth()->user()->currentTeam->meetings()->save($meeting);
+
+        // associate committees with meeting
+        $committees = $request->committees ?? [];
+        $createdMeeting->committees()->sync($committees);
+
+
+        return response()->json($meeting, 201);
+
+    })->name('meetings.store');
+
+
+    Route::post('meetings/{meeting}/minutes', function (Meeting $meeting, Request $request) {
+        // foreach committeeMinutes, save as a note
+        foreach ($request->committeeMinutes as $committeeMinutes) {
+            $meeting->notes()->create([
+                'content' => $committeeMinutes['content'],
+                'committee_id' => $committeeMinutes['committee_id'],
+                'user_id' => auth()->id(),
+            ]);
+        }
+        return response()->json($meeting->minutes, 201);
+    })->name('minutes.store');
+
+
+    Route::get('meetings/{meeting}/pdf', function (Meeting $meeting) {
+        // return view('pdfs.meeting', ['meeting' => $meeting]);
+        return pdf()->view('pdfs.meeting', ['meeting' => $meeting])
+            ->headerHtml('<div>My header</div>')
+            ->footerHtml('<div>My footer</div>')
+            ->name("{$meeting->name}.pdf")
+            ->download();
+
+    })->name('minutes.pdf');
 
 });
