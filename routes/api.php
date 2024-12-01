@@ -84,7 +84,7 @@ Route::post('/meetings/{meeting}/send', function (Meeting $meeting) {
 
     //send email to each member
     foreach ($members as $member) {
-        Mail::to($member->email)->send($mail);
+        Mail::to($member->email)->queue($mail);
     }
 
 

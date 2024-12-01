@@ -12,7 +12,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use function Spatie\LaravelPdf\Support\pdf;
 
-class MeetingShare extends Mailable
+class MeetingShare extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
