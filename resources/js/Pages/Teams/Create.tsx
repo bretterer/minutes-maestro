@@ -1,5 +1,5 @@
 import CreateTeamForm from '@/Pages/Teams/Partials/CreateTeamForm';
-import AppLayout from '@/Layouts/AppLayout';
+import AppLayout from '@/Layouts/AuthenticatedLayout';
 import React from 'react';
 
 export default function Create() {
