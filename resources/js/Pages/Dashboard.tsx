@@ -5,26 +5,11 @@ import Modal from "@/Components/Modal";
 import TakeMinutesForm from "@/Pages/TakeMinutesForm";
 import ReviewMinutes from "@/Pages/ReviewMinuets";
 import CalendarModal from "@/Pages/PastMeetings";
-import CreateMeetingForm from "./Meetings/Partials/CreateMeetingForm";
 import CommitteesModal from "./Modals/CommitteesModal";
 import ManageTeamModal from "./Modals/ManageTeamModal";
 import Show from "./Teams/Show";
-import { JetstreamTeamPermissions, Role, Team } from "@/types";
-
-type Meeting = {
-    id: number;
-    title: string;
-    date: string;
-    time: string;
-    host: string;
-    attendees: string[];
-    minutesApproved?: boolean;
-    summary?: string;
-    agenda?: string[];
-    discussionPoints?: string[];
-    actionItems?: string[];
-    notes?: string;
-};
+import { JetstreamTeamPermissions, Meeting, Role, Team } from "@/types";
+import CreateMeetingForm from "@/Components/CreateMeetingForm";
 
 export default function Dashboard() {
     const { props } = usePage();
@@ -40,6 +25,7 @@ export default function Dashboard() {
     const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false); // State for Calendar Modal
     const [selectedMinute, setSelectedMinute] = useState<Meeting | null>(null); // State to hold selected meeting for review
     const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
+    const user = usePage().props.auth.user;
 
 
     const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
@@ -99,7 +85,7 @@ export default function Dashboard() {
                 <div className="max-w-7xl mx-auto space-y-12">
                     {/* Hero Banner */}
                     <div className="bg-gradient-to-r from-indigo-700 via-blue-800 to-indigo-900 text-white rounded-lg shadow-md p-8">
-                        <h1 className="text-3xl font-bold mb-4">Welcome Back, User!</h1>
+                        <h1 className="text-3xl font-bold mb-4">Welcome Back, {user.name}</h1>
                         <p className="text-lg">
                             Track your meetings, review minutes, and stay organized effortlessly.
                         </p>

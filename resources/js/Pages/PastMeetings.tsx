@@ -1,20 +1,9 @@
 import React, { useState } from "react";
 import Modal from "@/Components/Modal";
 import ReviewMinutes from "@/Pages/ReviewMinuets"; 
+import { Meeting } from "@/types";
 
-interface Meeting {
-  id: number;
-  title: string;
-  date: string;
-  time: string;
-  host: string;
-  attendees: string[];
-  summary?: string;
-  agenda?: string[];
-  discussionPoints?: string[];
-  actionItems?: string[];
-  notes?: string;
-}
+
 
 interface PastMeetingsProps {
   isOpen: boolean;

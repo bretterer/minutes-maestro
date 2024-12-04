@@ -95,17 +95,43 @@ export interface TeamInvitation {
   updated_at: DateTime;
 }
 
-export interface Meeting {
-    id: number;
-    title: string;
-    date: string;
-    time: string;
-    host: string;
-    attendees: string[];
-    minutesAvailable?: boolean;
-    summary?: string;
-    agenda?: string[];
-    discussionPoints?: string[];
-    actionItems?: string[];
-    notes?: string;
-  };
+// export interface Meeting {
+//     id: number;
+//     title: string;
+//     date: string;
+//     time: string;
+//     host: string;
+//     attendees: string[];
+//     minutesAvailable?: boolean;
+//     summary?: string;
+//     agenda?: string[];
+//     discussionPoints?: string[];
+//     actionItems?: string[];
+//     notes?: string;
+//   };
+export type Committee = {
+  id: string;
+  name: string;
+}
+export type Note = {
+  content: string;
+  committee_id: string;
+}
+export type Meeting = {
+  id: number;
+  title: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  time: string;
+  host: string;
+  attendees: string[];
+  minutesAvailable?: boolean;
+  summary?: string;
+  agenda?: string[];
+  discussionPoints?: string[];
+  actionItems?: string[];
+  minutesApproved?: boolean
+  committees?: Committee[];
+  notes?: Note[];
+};

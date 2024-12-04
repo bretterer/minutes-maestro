@@ -1,24 +1,8 @@
+import { Meeting } from "@/types";
 import { useForm } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
-type Meeting = {
-    id: number;
-    title: string;
-    date: string;
-    start_time: string;
-    end_time: string;
-    time: string;
-    host: string;
-    attendees: string[];
-    minutesAvailable?: boolean;
-    summary?: string;
-    agenda?: string[];
-    discussionPoints?: string[];
-    actionItems?: string[];
-    notes?: string;
-};
 
 interface Committee {
     id: number;
@@ -31,6 +15,7 @@ export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meetin
         committeeMinutes: {} as { [key: number]: string }, // Change to object
     });
 
+    // console.log(meeting)
 
     const [committees, setCommittees] = useState<Committee[]>([]);
 
