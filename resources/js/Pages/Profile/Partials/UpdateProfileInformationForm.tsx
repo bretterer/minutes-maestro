@@ -78,6 +78,7 @@ export default function UpdateProfileInformationForm({ user }: Props) {
   }
 
   return (
+    <div className='text-black'>
     <FormSection
       onSubmit={updateProfileInformation}
       title={'Profile Information'}
@@ -209,5 +210,7 @@ export default function UpdateProfileInformationForm({ user }: Props) {
         ) : null}
       </div>
     </FormSection>
+
+    </div>
   );
 }

@@ -13,7 +13,7 @@ export default function SectionTitle({ title, description }: Props) {
           {title}
         </h3>
 
-        <p className="mt-1 text-sm text-gray-600">
+        <p className="mt-1 text-sm text-gray-200">
           {description}
         </p>
       </div>
