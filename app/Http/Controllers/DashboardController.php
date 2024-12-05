@@ -11,7 +11,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $meetings = auth()->user()->currentTeam->meetings()->orderBy('start_time')->where("start_time", ">=", now())->get();
+        $meetings = auth()->user()->currentTeam->meetings()->with('notes')->orderBy('start_time')->where("start_time", ">=", now()->addHours(2))->get();
         $teamId = auth()->user()->currentTeam->id;
 
         $meetings->map(function ($meeting) {

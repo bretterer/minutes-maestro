@@ -5,12 +5,20 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 interface Committee {
-    id: number;
+    id: string;
     name: string;
+    notes: Note[];
+}
+
+interface Note {
+    id: string;
+    content: string;
+    committee_id: string;
 }
 
 export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meeting, onClose: () => void }) {
 
+    console.log(meeting);
     const form = useForm({
         committeeMinutes: {} as { [key: number]: string }, // Change to object
     });
@@ -34,6 +42,17 @@ export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meetin
     if (meeting && meeting.end_time) {
         meetingEnd = new Date(meeting.end_time).toISOString().slice(0, 16) || '';
     }
+
+
+    // get notes for committee from meeting based on committee_id
+    const getNotes = (committee: Committee) => {
+        if(meeting && meeting.notes) {
+            const note = meeting.notes.find((note) => note.committee_id === committee.id);
+
+            return note ? note.content : '';
+        }
+    }
+
 
 
     useEffect(() => {
@@ -143,7 +162,7 @@ export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meetin
                 <label className="block text-gray-300 font-bold mb-2" htmlFor="committeeMinutes">
                     Committee Minutes
                 </label>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
                     {committees.map((committee) => (
                         <div key={committee.id}>
                             <label className="block text-gray-300 font-bold mb-2" htmlFor={`committee-${committee.id}`}>
@@ -153,7 +172,7 @@ export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meetin
                                 theme="snow"
                                 className="bg-gray-800 text-gray-100"
                                 id={`committee-${committee.id}`}
-                                value={form.data.committeeMinutes[committee.id] || ""}
+                                value={form.data.committeeMinutes[committee.id] || getNotes(committee)}
                                 onChange={(content) => {
                                     form.setData('committeeMinutes', {
                                         ...form.data.committeeMinutes,

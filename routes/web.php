@@ -69,11 +69,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::post('meetings/{meeting}/minutes', function (Meeting $meeting, Request $request) {
         // foreach committeeMinutes, save as a note
         foreach ($request->committeeMinutes as $committeeMinutes) {
-            $meeting->notes()->create([
-                'content' => $committeeMinutes['content'],
-                'committee_id' => $committeeMinutes['committee_id'],
-                'user_id' => auth()->id(),
-            ]);
+            $meeting->notes()->updateOrCreate(
+                [
+                    'committee_id' => $committeeMinutes['committee_id'],
+                    'meeting_id' => $meeting->id,
+                ],
+                [
+                    'content' => $committeeMinutes['content'],
+                    'user_id' => auth()->id(),
+                ]
+            );
         }
         return response()->json($meeting->minutes, 201);
     })->name('minutes.store');
