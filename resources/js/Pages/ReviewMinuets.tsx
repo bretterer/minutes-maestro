@@ -1,6 +1,8 @@
-import { Meeting } from '@/types';
+import { Committee, Meeting, Note } from '@/types';
 import React, { useState } from 'react';
 import { FaPencilAlt, FaEnvelope, FaPrint, FaFilePdf } from 'react-icons/fa';
+import TakeMinutesForm from './TakeMinutesForm';
+import ReactQuill from 'react-quill';
 
 interface ReviewMinutesModalProps {
   meeting: Meeting;
@@ -12,18 +14,13 @@ export default function ReviewMinuets({
   onClose,
 }: ReviewMinutesModalProps) {
   const [isEditingNotes, setIsEditingNotes] = useState(false);
-  const [editedNotes, setEditedNotes] = useState(meeting.notes || '');
+  const [editedNotes, setEditedNotes] = useState(meeting.notes || []);
   const [showApproveButton, setShowApproveButton] = useState(
     !meeting.minutesApproved,
   );
 
-  const handleNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditedNotes(event.target.value);
-  };
-
-  const handleSaveNotes = () => {
-    // Logic to save notes (e.g., send it to an API or update the state)
-    setIsEditingNotes(false);
+  const handleNotesChange = (notes: Note[]) => {
+    setEditedNotes(notes);
   };
 
   const handleApproveMinutes = async () => {
@@ -66,6 +63,13 @@ export default function ReviewMinuets({
     window.open(`/meetings/${meeting.id}/pdf`, '_blank');
   };
 
+  const getNotes = (committee: Committee) => {
+    if (meeting && meeting.notes) {
+      const note = editedNotes.find(note => note.committee_id === committee.id);
+      return note ? note.content : '';
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 bg-gray-800 bg-opacity-60 flex justify-center items-center z-50"
@@ -97,36 +101,51 @@ export default function ReviewMinuets({
               <FaFilePdf className="text-xl" />
             </button>
           </div>
-
-          {meeting.committees?.map(committee => (
-            <div key={committee.id} className="mt-6">
-              <h3 className="font-bold text-lg">{committee.name}</h3>
-              {meeting.notes
-                ?.filter(note => note.committee_id === committee.id)
-                .map((note, index) => (
-                  <div key={index} className="mt-2">
-                    <p>{note.content}</p>
-                  </div>
-                )) || <p>No notes for this committee</p>}
+          {isEditingNotes ? (
+            <div className="h-96 overflow-y-auto">
+              <TakeMinutesForm
+                meeting={meeting}
+                onClose={() => setIsEditingNotes(false)}
+                onEdit={handleNotesChange}
+              />
             </div>
-          ))}
-        </div>
-
-        <div className="mt-8 flex justify-end space-x-2">
-          {showApproveButton && (
-            <button
-              className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700"
-              onClick={handleApproveMinutes}
-            >
-              Approve
-            </button>
+          ) : (
+            <>
+              {meeting.committees?.map(committee => (
+                <div key={committee.id}>
+                  <label
+                    className="block text-gray-300 font-bold mb-2"
+                    htmlFor={`committee-${committee.id}`}
+                  >
+                    {committee.name}
+                  </label>
+                  <ReactQuill
+                    theme="snow"
+                    className="bg-gray-800 text-gray-100"
+                    id={`committee-${committee.id}`}
+                    value={getNotes(committee)}
+                    readOnly
+                  />
+                </div>
+              ))}
+              <div className="mt-8 flex justify-end space-x-2">
+                {showApproveButton && (
+                  <button
+                    className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700"
+                    onClick={handleApproveMinutes}
+                  >
+                    Approve
+                  </button>
+                )}
+                <button
+                  className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700"
+                  onClick={onClose}
+                >
+                  Close
+                </button>
+              </div>
+            </>
           )}
-          <button
-            className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700"
-            onClick={onClose}
-          >
-            Close
-          </button>
         </div>
       </div>
     </div>
