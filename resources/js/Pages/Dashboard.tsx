@@ -11,6 +11,9 @@ import Show from "./Teams/Show";
 import { JetstreamTeamPermissions, Meeting, Role, Team } from "@/types";
 import CreateMeetingForm from "@/Components/CreateMeetingForm";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Dashboard() {
     const { props } = usePage();
     const [isCreateMeetingModalOpen, setCreateMeetingModalOpen] = useState(false);
@@ -30,11 +33,20 @@ export default function Dashboard() {
 
     const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
-    const upcomingMeetings = props.meetings as Meeting[];
-    const recentMinutes = props.recentMeetings as Meeting[];
+    let upcomingMeetings = props.meetings as Meeting[];
+    let recentMinutes = props.recentMeetings as Meeting[];
     const availableRoles = props.availableRoles as Role[]
     const permissions = props.permissions as JetstreamTeamPermissions
     const team = props.team as any
+
+
+    Echo.private('meetings')
+        .listen('MeetingCreated', (e: any) => {
+            console.log(e);
+            toast.success('New Meeting Created: ' + e.meeting.name);
+            upcomingMeetings.push(e.meeting);
+            console.log(upcomingMeetings);
+        });
 
     const toggleDropdown = (id: number) => {
         setDropdownOpen((prev) => (prev === id ? null : id));
@@ -80,6 +92,8 @@ export default function Dashboard() {
 
     return (
         <AuthenticatedLayout>
+
+        <ToastContainer />
             <Head title="Dashboard" />
             <div className="min-h-screen bg-gray-900 text-gray-300 py-12 px-6">
                 <div className="max-w-7xl mx-auto space-y-12">

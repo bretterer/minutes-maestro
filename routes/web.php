@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MeetingCreated;
 use App\Http\Controllers\DashboardController;
 use App\Models\Meeting;
 use Illuminate\Foundation\Application;
@@ -60,6 +61,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         $committees = $request->committees ?? [];
         $createdMeeting->committees()->sync($committees);
 
+        MeetingCreated::dispatch($createdMeeting);
 
         return response()->json($meeting, 201);
 

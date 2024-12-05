@@ -45,6 +45,13 @@ Route::delete('/committees/{committee}', function (Committee $committee) {
     return response()->json(['message' => 'Committee deleted']);
 })->middleware('auth:sanctum');
 
+Route::get('/meetings/upcoming', function () {
+    return Meeting::upcomingMeetings();
+})->middleware('auth:sanctum');
+
+Route::get('/meetings/recent', function () {
+    return Meeting::recentMeetings();
+})->middleware('auth:sanctum');
 
 Route::get('/meetings/{meeting}/committees', function (Meeting $meeting) {
     return $meeting->committees;

@@ -86,6 +86,10 @@ export default function TakeMinutesForm({ meeting, onClose, onEdit }: props) {
         };
 
         fetchCommittees();
+
+
+
+
     }, [meeting?.id]);
 
 
