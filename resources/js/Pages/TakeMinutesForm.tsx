@@ -1,24 +1,18 @@
-import { Meeting } from "@/types";
-import { useForm } from "@inertiajs/react";
+import { Committee, Meeting, Note } from "@/types";
+import { useForm, usePage } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-interface Committee {
-    id: string;
-    name: string;
-    notes: Note[];
-}
 
-interface Note {
-    id: string;
-    content: string;
-    committee_id: string;
-}
+type props = {
+  meeting: Meeting;
+  onClose: () => void;
+  onEdit?: (newNotes: Note[]) => void;
+};
 
-export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meeting, onClose: () => void }) {
+export default function TakeMinutesForm({ meeting, onClose, onEdit }: props) {
 
-    console.log(meeting);
     const form = useForm({
         committeeMinutes: {} as { [key: number]: string }, // Change to object
     });
@@ -26,11 +20,8 @@ export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meetin
     // console.log(meeting)
 
     const [committees, setCommittees] = useState<Committee[]>([]);
-
-    const [agenda, setAgenda] = useState("");
-    const [discussionPoints, setDiscussionPoints] = useState("");
-    const [actionItems, setActionItems] = useState("");
-    const [notes, setNotes] = useState("");
+    const [notes, setNotes] = useState<Note[]>(meeting?.notes || [])
+    const user = usePage().props.auth.user;
 
     const meetingTitle = meeting?.title || '';
     let meetingStart = '';
@@ -47,10 +38,35 @@ export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meetin
     // get notes for committee from meeting based on committee_id
     const getNotes = (committee: Committee) => {
         if(meeting && meeting.notes) {
-            const note = meeting.notes.find((note) => note.committee_id === committee.id);
-
+            const note = notes.find((note) => note.committee_id === committee.id);
             return note ? note.content : '';
         }
+    }
+
+    //on change handler for notes
+    function handleNotesChange(content: string, committee: Committee){
+        form.setData('committeeMinutes', {
+          ...form.data.committeeMinutes,
+          [committee.id]: content,
+        });
+        let newNotes = [...notes]
+        let index = newNotes.findIndex((n) => n.committee_id === committee.id)
+        //create a new note object
+        if(index === -1){
+            let newNote: Note = {
+                committee_id: committee.id,
+                content: content,
+                created_at: new Date().toISOString(),
+                meeting_id: meeting?.id.toString() || "",
+                updated_at: new Date().toISOString(),
+                user_id: user.id
+            }
+            newNotes.push(newNote)
+        } else {
+            //edit existing note
+            newNotes[index].content = content
+        }
+        setNotes(newNotes)
     }
 
 
@@ -83,8 +99,10 @@ export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meetin
                 })),
             });
 
+            if(onEdit){
+               onEdit(notes)
+            }
             // Handle successful response (e.g., show a success message, close the modal)
-            console.log('Minutes saved:', response.data);
             onClose();
 
         } catch (error) {
@@ -123,6 +141,7 @@ export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meetin
                     Start Time
                 </label>
                 <input
+                    disabled
                     type="datetime-local"
                     id="startTime"
                     className="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:border-blue-500"
@@ -136,6 +155,7 @@ export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meetin
                     End Time
                 </label>
                 <input
+                    disabled
                     type="datetime-local"
                     id="endTime"
                     className="w-full p-3 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:outline-none focus:border-blue-500"
@@ -172,13 +192,8 @@ export default function TakeMinutesForm({ meeting, onClose }: { meeting?: Meetin
                                 theme="snow"
                                 className="bg-gray-800 text-gray-100"
                                 id={`committee-${committee.id}`}
-                                value={form.data.committeeMinutes[committee.id] || getNotes(committee)}
-                                onChange={(content) => {
-                                    form.setData('committeeMinutes', {
-                                        ...form.data.committeeMinutes,
-                                        [committee.id]: content
-                                    });
-                                }}
+                                value={getNotes(committee)}
+                                onChange={(content) => handleNotesChange(content, committee)}
                             />
                         </div>
                     ))}

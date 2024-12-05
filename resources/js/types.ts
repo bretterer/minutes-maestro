@@ -114,8 +114,13 @@ export type Committee = {
   name: string;
 }
 export type Note = {
-  content: string;
+  id?: string;
   committee_id: string;
+  content: string,
+  created_at: string,
+  meeting_id: string,
+  updated_at: string,
+  user_id: number
 }
 export type Meeting = {
   id: number;
