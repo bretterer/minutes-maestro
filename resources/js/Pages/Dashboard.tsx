@@ -40,6 +40,8 @@ export default function Dashboard() {
     const team = props.team as any
 
 
+
+
     Echo.private('meetings')
         .listen('MeetingCreated', (e: any) => {
             console.log(e);
@@ -116,14 +118,16 @@ export default function Dashboard() {
                         </button>
                         <button
                             onClick={() => setCommitteesModalOpen(true)}
-                            className="flex flex-col items-center justify-center bg-gray-800 text-green-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-green-300 transform hover:scale-105 transition"
+                            disabled={!permissions.canUpdateTeam}
+                            className="flex flex-col items-center justify-center bg-gray-800 text-green-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-green-300 transform hover:scale-105 transition disabled:bg-gray-800 disabled:text-gray-500 disabled:hover:scale-100"
                         >
                             <i className="fas fa-pencil-alt text-4xl mb-2"></i>
                             <span className="font-semibold">Committees</span>
                         </button>
                         <button
                             onClick={() => setManageTeamModalOpen(true)}
-                            className="flex flex-col items-center justify-center bg-gray-800 text-gray-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-gray-300 transform hover:scale-105 transition"
+                            disabled={!permissions.canUpdateTeam}
+                            className="flex flex-col items-center justify-center bg-gray-800 text-gray-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-gray-300 transform hover:scale-105 transition disabled:bg-gray-800 disabled:text-gray-500 disabled:hover:scale-100"
                         >
                             <i className="fas fa-file-alt text-4xl mb-2"></i>
                             <span className="font-semibold">Manage Team</span>
