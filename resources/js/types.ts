@@ -77,6 +77,7 @@ export interface JetstreamTeamPermissions {
   canDeleteTeam: boolean;
   canRemoveTeamMembers: boolean;
   canUpdateTeam: boolean;
+  canApproveMinutes: boolean;
 }
 
 export interface Role {
@@ -139,4 +140,8 @@ export type Meeting = {
   minutesApproved?: boolean
   committees?: Committee[];
   notes?: Note[];
+  permissions: {
+    canApproveMinutes: boolean;
+    canTakeNotes: boolean;
+  };
 };

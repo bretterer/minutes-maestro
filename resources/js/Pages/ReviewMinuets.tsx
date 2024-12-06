@@ -86,7 +86,7 @@ export default function ReviewMinuets({
 
           {/* Icons for actions */}
           <div className="flex space-x-4 mt-4 mb-4">
-            {!meeting.minutesApproved ? (
+            {!meeting.minutesApproved && meeting.permissions.canTakeNotes ? (
               <button
                 className="text-blue-500"
                 onClick={() => setIsEditingNotes(!isEditingNotes)}
@@ -129,7 +129,7 @@ export default function ReviewMinuets({
                 </div>
               ))}
               <div className="mt-8 flex justify-end space-x-2">
-                {showApproveButton && (
+                {showApproveButton && meeting.permissions.canApproveMinutes && (
                   <button
                     className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700"
                     onClick={handleApproveMinutes}

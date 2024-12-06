@@ -43,6 +43,17 @@ export default function ManageTeamModal({ team, availableRoles, permissions, onC
         fetchUserTeams();
     }, []);
 
+    const switchTeam = (teamId: number) => async (e: React.MouseEvent) => {
+        e.preventDefault();
+        try {
+            await window.axios.put('/current-team', { team_id: teamId }).then(() => {
+            window.location.reload();
+            });
+        } catch (error) {
+            console.error('Error switching team:', error);
+        }
+    }
+
 
     return (
         <div>
@@ -58,7 +69,10 @@ export default function ManageTeamModal({ team, availableRoles, permissions, onC
                                 <div className="flex w-0 flex-1 items-center">
                                     <span className="ml-2 flex-1 w-0 truncate">{team.name}</span>
                                     {team.currentTeam == false && (
-                                        <a href=""
+
+
+                                        <a href="#"
+                                            onClick={switchTeam(team.id)}
                                             className="text-gray-400 hover:text-green-500"
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -72,12 +86,14 @@ export default function ManageTeamModal({ team, availableRoles, permissions, onC
                         ))}
                     </ul>
                 </div>
+                {permissions.canRemoveTeamMembers == true && (
                 <div className="mt-5">
                     <TeamMemberManager
                         team={team}
                         availableRoles={availableRoles}
                         userPermissions={permissions} />
                 </div>
+)}
             </div>
         </div>
     );

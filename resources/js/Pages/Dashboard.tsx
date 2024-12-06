@@ -40,6 +40,7 @@ export default function Dashboard() {
     const team = props.team as any
 
 
+    console.log(upcomingMeetings);
 
 
     Echo.private('meetings')
@@ -95,7 +96,7 @@ export default function Dashboard() {
     return (
         <AuthenticatedLayout>
 
-        <ToastContainer />
+            <ToastContainer />
             <Head title="Dashboard" />
             <div className="min-h-screen bg-gray-900 text-gray-300 py-12 px-6">
                 <div className="max-w-7xl mx-auto space-y-12">
@@ -126,7 +127,6 @@ export default function Dashboard() {
                         </button>
                         <button
                             onClick={() => setManageTeamModalOpen(true)}
-                            disabled={!permissions.canUpdateTeam}
                             className="flex flex-col items-center justify-center bg-gray-800 text-gray-400 py-6 px-8 rounded-lg shadow-lg hover:bg-gray-700 hover:text-gray-300 transform hover:scale-105 transition disabled:bg-gray-800 disabled:text-gray-500 disabled:hover:scale-100"
                         >
                             <i className="fas fa-file-alt text-4xl mb-2"></i>
@@ -180,27 +180,39 @@ export default function Dashboard() {
                                                         dropdownRefs.current.set(meeting.id, el as HTMLDivElement)
                                                     }
                                                 >
-                                                    <button
-                                                        onClick={() => toggleDropdown(meeting.id)} // Toggle dropdown
-                                                        className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
-                                                    >
-                                                        Actions
-                                                    </button>
-                                                    {dropdownOpen === meeting.id && (
-                                                        <div className="absolute mt-2 w-40 bg-gray-700 shadow-lg rounded-md z-10">
+                                                    {meeting.permissions.canTakeNotes ? (
+                                                        <>
                                                             <button
-                                                                className="block w-full text-left px-4 py-2 hover:bg-gray-600"
-                                                                onClick={() => handleTakeMinutes(meeting)} // Open Take Minutes Modal
+                                                                onClick={() => toggleDropdown(meeting.id)}
+                                                                className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
                                                             >
-                                                                Take Minutes
+                                                                Actions
                                                             </button>
-                                                            <button
-                                                                onClick={() => handleDelete(meeting.id)} // Open Delete confirmation modal
-                                                                className="block w-full text-left px-4 py-2 text-red-400 hover:bg-gray-600"
-                                                            >
-                                                                Delete
-                                                            </button>
-                                                        </div>
+
+                                                            {dropdownOpen === meeting.id && (
+                                                                <div className="absolute mt-2 w-40 bg-gray-700 shadow-lg rounded-md z-10">
+                                                                    <button
+                                                                        className="block w-full text-left px-4 py-2 hover:bg-gray-600"
+                                                                        onClick={() => handleTakeMinutes(meeting)}
+                                                                    >
+                                                                        Take Minutes
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleDelete(meeting.id)}
+                                                                        className="block w-full text-left px-4 py-2 text-red-400 hover:bg-gray-600"
+                                                                    >
+                                                                        Delete
+                                                                    </button>
+                                                                </div>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => openModal(meeting)} // Assuming you have this function
+                                                            className="bg-gray-500 text-white py-1 px-4 rounded-md hover:bg-gray-600 transition"
+                                                        >
+                                                            View
+                                                        </button>
                                                     )}
                                                 </td>
                                             </tr>

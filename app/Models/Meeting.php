@@ -48,11 +48,19 @@ class Meeting extends Model
 
         $meetings->map(function ($meeting) {
             $meeting->load('team.committees');
+            $meeting->load('committees');
             $meeting->title = $meeting->name;
             $meeting->date = $meeting->start_time->format('M d, Y');
             $meeting->time = $meeting->start_time->format('h:i A');
             $meeting->start = $meeting->start_time->format('Y-m-d\TH:i:s');
             $meeting->end = $meeting->end_time->format('Y-m-d\TH:i:s');
+            $meeting->notes = $meeting->notes->groupBy('committee_id')->map(function ($notes) {
+                return $notes->pluck('content');
+            });
+            $meeting->permissions = [
+                'canTakeNotes' => auth()->user()->can('takeNotes', $meeting),
+                'canApproveMinutes' => auth()->user()->can('approveMinutes', $meeting),
+            ];
 
             return $meeting;
         });
@@ -82,6 +90,11 @@ class Meeting extends Model
             $meeting->start = $meeting->start_time->format('Y-m-d\TH:i:s');
             $meeting->end = $meeting->end_time->format('Y-m-d\TH:i:s');
             $meeting->minutesApproved = $meeting->minutes_approved;
+
+            $meeting->permissions = [
+                'canTakeNotes' => auth()->user()->can('takeNotes', $meeting),
+                'canApproveMinutes' => auth()->user()->can('approveMinutes', $meeting),
+            ];
 
             return $meeting;
         });
