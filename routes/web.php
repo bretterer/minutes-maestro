@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Models\Meeting;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -95,5 +96,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             ->download();
 
     })->name('minutes.pdf');
+
+
+    Route::get('/dologout', function (Request $request) {
+
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    })->name('dologout');
 
 });

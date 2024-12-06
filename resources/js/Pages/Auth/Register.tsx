@@ -24,9 +24,9 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-600 flex items-center justify-center">
       <Head title="Register" />
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-        <h2 className="text-2xl font-extrabold text-center text-gray-800">Create an Account</h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+      <div className="w-full max-w-md p-6 bg-blue-900 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-extrabold text-center text-gray-50">Create an Account</h2>
+        <p className="mt-2 text-center text-sm text-gray-200">
           Please fill in the details to create a new account.
         </p>
 
@@ -41,7 +41,7 @@ export default function Register() {
               onChange={(e) => form.setData('name', e.currentTarget.value)}
               required
             />
-            <InputError className="mt-2" message={form.errors.name} />
+            <InputError className="mt-2 text-yellow-400" message={form.errors.name} />
           </div>
 
           <div className="mt-4">
@@ -54,7 +54,7 @@ export default function Register() {
               onChange={(e) => form.setData('email', e.currentTarget.value)}
               required
             />
-            <InputError className="mt-2" message={form.errors.email} />
+            <InputError className="mt-2 text-yellow-400" message={form.errors.email} />
           </div>
 
           <div className="mt-4">
@@ -68,7 +68,7 @@ export default function Register() {
               required
               autoComplete="new-password"
             />
-            <InputError className="mt-2" message={form.errors.password} />
+            <InputError className="mt-2 text-yellow-400" message={form.errors.password} />
           </div>
 
           <div className="mt-4">
@@ -84,13 +84,13 @@ export default function Register() {
               required
               autoComplete="new-password"
             />
-            <InputError className="mt-2" message={form.errors.password_confirmation} />
+            <InputError className="mt-2 text-yellow-400" message={form.errors.password_confirmation} />
           </div>
 
           <div className="flex items-center justify-between mt-6">
             <Link
               href={route('login')}
-              className="underline text-sm text-indigo-600 hover:text-indigo-800"
+              className="underline text-sm text-gray-300 hover:text-gray-400"
             >
               Already registered?
             </Link>

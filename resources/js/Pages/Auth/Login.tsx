@@ -31,9 +31,9 @@ export default function Login({ canResetPassword, status }: Props) {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-600 flex items-center justify-center">
       <Head title="Login" />
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-        <h2 className="text-2xl font-extrabold text-center text-gray-800">Welcome Back</h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+      <div className="w-full max-w-md p-6 bg-blue-900 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-extrabold text-center text-gray-50">Welcome Back</h2>
+        <p className="mt-2 text-center text-sm text-gray-200">
           Please log in to your account
         </p>
 
@@ -55,7 +55,7 @@ export default function Login({ canResetPassword, status }: Props) {
               required
               autoFocus
             />
-            <InputError className="mt-2" message={form.errors.email} />
+            <InputError className="mt-2 text-yellow-400" message={form.errors.email} />
           </div>
 
           <div className="mt-4">
@@ -69,7 +69,7 @@ export default function Login({ canResetPassword, status }: Props) {
               required
               autoComplete="current-password"
             />
-            <InputError className="mt-2" message={form.errors.password} />
+            <InputError className="mt-2 text-yellow-400" message={form.errors.password} />
           </div>
 
           <div className="mt-4">
@@ -81,7 +81,7 @@ export default function Login({ canResetPassword, status }: Props) {
                   form.setData('remember', e.currentTarget.checked ? 'on' : '')
                 }
               />
-              <span className="ml-2 text-sm text-gray-600">Remember me</span>
+              <span className="ml-2 text-sm text-gray-200">Remember me</span>
             </label>
           </div>
 
@@ -90,7 +90,7 @@ export default function Login({ canResetPassword, status }: Props) {
               <div>
                 <Link
                   href={route('password.request')}
-                  className="underline text-sm text-indigo-600 hover:text-indigo-800"
+                  className="underline text-sm text-gray-300 hover:text-gray-400"
                 >
                   Forgot your password?
                 </Link>
@@ -100,7 +100,7 @@ export default function Login({ canResetPassword, status }: Props) {
             <div className="flex items-center justify-end">
               <Link
                 href={route('register')}
-                className="underline text-sm text-indigo-600 hover:text-indigo-800"
+                className="underline text-sm text-gray-300 hover:text-gray-400"
               >
                 Need an account?
               </Link>

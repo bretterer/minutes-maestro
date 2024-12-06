@@ -54,7 +54,7 @@ export default function AuthenticatedLayout({
                 <DropdownLink href={route('profile.show')}>
                   Profile
                 </DropdownLink>
-                <DropdownLink href={route('logout')}>Log Out</DropdownLink>
+                <DropdownLink href={route('dologout')}>Log Out</DropdownLink>
               </Dropdown>
             </div>
 
