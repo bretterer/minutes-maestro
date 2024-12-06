@@ -33,21 +33,19 @@ export default function Dashboard() {
 
     const dropdownRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
-    let upcomingMeetings = props.meetings as Meeting[];
-    let recentMinutes = props.recentMeetings as Meeting[];
+    const [upcomingMeetings, setUpcomingMeetings] = useState<Meeting[]>(props.meetings as Meeting[])
+    const [recentMinutes, setRecentMinutes] = useState<Meeting[]>(props.recentMeetings as Meeting[])
     const availableRoles = props.availableRoles as Role[]
     const permissions = props.permissions as JetstreamTeamPermissions
     const team = props.team as any
 
 
-    console.log(upcomingMeetings);
 
-
-    Echo.private('meetings')
+    window.Echo.private('meetings')
         .listen('MeetingCreated', (e: any) => {
             console.log(e);
             toast.success('New Meeting Created: ' + e.meeting.name);
-            upcomingMeetings.push(e.meeting);
+            setUpcomingMeetings([...upcomingMeetings, e.meeting])
             console.log(upcomingMeetings);
         });
 
@@ -72,10 +70,10 @@ export default function Dashboard() {
         console.log("Deleted meeting ID:", deleteConfirmationId);
 
         const response = window.axios.delete(`/api/meetings/${deleteConfirmationId}`).then(() => {
-
             setDeleteConfirmationId(null);
             setIsDeleteModalOpen(false); // Close delete confirmation modal
         });
+        setUpcomingMeetings(upcomingMeetings.filter(m => m.id !== deleteConfirmationId))
     };
 
     const cancelDelete = () => {
