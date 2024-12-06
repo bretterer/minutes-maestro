@@ -68,8 +68,11 @@ export default function Dashboard() {
         setDropdownOpen(null);
     };
 
-    const confirmDelete = () => {
+    const confirmDelete = async () => {
         console.log("Deleted meeting ID:", deleteConfirmationId);
+
+        const response = await window.axios.delete(`/meetings/${deleteConfirmationId}`);
+
         setDeleteConfirmationId(null);
         setIsDeleteModalOpen(false); // Close delete confirmation modal
     };
@@ -266,7 +269,7 @@ export default function Dashboard() {
                                 Cancel
                             </button>
                             <button
-                                onClick={confirmDelete}
+                                onClick={confirmDelete()}
                                 className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
                             >
                                 Confirm

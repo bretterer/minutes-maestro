@@ -53,6 +53,11 @@ Route::get('/meetings/recent', function () {
     return Meeting::recentMeetings();
 })->middleware('auth:sanctum');
 
+Route::delete('/meetings/{meeting}', function (Meeting $meeting) {
+    $meeting->delete();
+    return response()->json(['message' => 'Meeting deleted']);
+})->middleware('auth:sanctum');
+
 Route::get('/meetings/{meeting}/committees', function (Meeting $meeting) {
     return $meeting->committees;
 })->middleware('auth:sanctum');
