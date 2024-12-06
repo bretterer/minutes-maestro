@@ -172,19 +172,19 @@ export default function TeamMemberManager({
             )}
           >
             <div className="col-span-6">
-              <div className="max-w-xl text-sm text-gray-600">
+              <div className="max-w-xl text-sm text-gray-50">
                 Please provide the email address of the person you would like to
                 add to this team.
               </div>
             </div>
 
             {/* <!-- Member Email --> */}
-            <div className="col-span-6 sm:col-span-4 text-black">
+            <div className="col-span-6 sm:col-span-4 text-gray-50">
               <InputLabel htmlFor="email" value="Email" />
               <TextInput
                 id="email"
                 type="email"
-                className="mt-1 block w-full"
+                className="mt-1 block w-full bg-gray-500"
                 value={addTeamMemberForm.data.email}
                 onChange={e =>
                   addTeamMemberForm.setData('email', e.currentTarget.value)
@@ -233,7 +233,7 @@ export default function TeamMemberManager({
                         {/* <!-- Role Name --> */}
                         <div className="flex items-center">
                           <div
-                            className={classNames('text-sm text-gray-600', {
+                            className={classNames('text-sm text-gray-50', {
                               'font-semibold':
                                 addTeamMemberForm.data.role == role.key,
                             })}
@@ -257,7 +257,7 @@ export default function TeamMemberManager({
                         </div>
 
                         {/* <!-- Role Description --> */}
-                        <div className="mt-2 text-xs text-gray-600">
+                        <div className="mt-2 text-xs text-gray-50">
                           {role.description}
                         </div>
                       </div>
@@ -290,7 +290,7 @@ export default function TeamMemberManager({
                   className="flex items-center justify-between"
                   key={invitation.id}
                 >
-                  <div className="text-gray-600">{invitation.email}</div>
+                  <div className="text-gray-50">{invitation.email}</div>
 
                   <div className="flex items-center">
                     {/* <!-- Cancel Team Invitation --> */}
@@ -322,7 +322,7 @@ export default function TeamMemberManager({
             description={'All of the people that are part of this team.'}
           >
             {/* <!-- Team Member List --> */}
-            <div className="space-y-6 text-black">
+            <div className="space-y-6 text-gray-50">
               {team.users.map(user => (
                 <div
                   className="flex items-center justify-between"
@@ -342,7 +342,7 @@ export default function TeamMemberManager({
                     {userPermissions.canAddTeamMembers &&
                     availableRoles.length ? (
                       <button
-                        className="ml-2 text-sm text-gray-400 underline"
+                        className="ml-2 text-sm text-gray-200 underline"
                         onClick={() => manageRole(user)}
                       >
                         {displayableRole(user.membership.role)}

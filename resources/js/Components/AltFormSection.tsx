@@ -23,7 +23,7 @@ export default function AltFormSection({
       <div className="md:col-span-1">
         <div className="px-4 sm:px-0">
           <h3 className="text-lg font-medium text-white">{title}</h3>
-          <p className="mt-1 text-sm text-gray-300">{description}</p>
+          <p className="mt-1 text-sm text-gray-50">{description}</p>
         </div>
       </div>
 
@@ -36,7 +36,7 @@ export default function AltFormSection({
         >
           <div
             className={classNames(
-              'px-4 py-5 bg-gray-200 sm:p-6 shadow',
+              'px-4 py-5 bg-gray-700 sm:p-6 shadow',
               hasActions
                 ? 'sm:rounded-tl-md sm:rounded-tr-md'
                 : 'sm:rounded-md',
@@ -46,7 +46,7 @@ export default function AltFormSection({
           </div>
 
           {hasActions && (
-            <div className="flex items-center justify-end px-4 py-3 bg-gray-100 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
+            <div className="flex items-center justify-end px-4 py-3 bg-gray-600 text-right sm:px-6 shadow sm:rounded-bl-md sm:rounded-br-md">
               {renderActions?.()}
             </div>
           )}
