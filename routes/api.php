@@ -54,6 +54,9 @@ Route::get('/meetings/recent', function () {
 })->middleware('auth:sanctum');
 
 Route::delete('/meetings/{meeting}', function (Meeting $meeting) {
+    $meeting->notes()->delete();
+    $meeting->committees()->detach();
+
     $meeting->delete();
     return response()->json(['message' => 'Meeting deleted']);
 })->middleware('auth:sanctum');
