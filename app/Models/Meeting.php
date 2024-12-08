@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Meeting extends Model
 {
@@ -40,6 +41,7 @@ class Meeting extends Model
     {
         return $this->hasMany(Note::class);
     }
+
 
 
     public static function upcomingMeetings(): Collection

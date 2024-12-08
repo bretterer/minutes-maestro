@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\ApproveMeetingAction;
 use App\Models\Committee;
 use App\Models\Meeting;
 use Illuminate\Http\Request;
@@ -67,8 +68,7 @@ Route::get('/meetings/{meeting}/committees', function (Meeting $meeting) {
 
 
 Route::post('/meetings/{meeting}/approveMinutes', function (Meeting $meeting) {
-    $meeting->minutes_approved = true;
-    $meeting->save();
+    (new ApproveMeetingAction())->execute($meeting);
     return response()->json(['message' => 'Minutes approved']);
 })->middleware('auth:sanctum');
 
