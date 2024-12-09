@@ -62,6 +62,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         $committees = $request->committees ?? [];
         $createdMeeting->committees()->sync($committees);
 
+
         MeetingCreated::dispatch($createdMeeting);
 
         return response()->json($meeting, 201);

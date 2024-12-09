@@ -43,10 +43,13 @@ export default function Dashboard() {
 
     Echo.private('meetings')
         .listen('MeetingCreated', (e: any) => {
-            console.log(e);
+            // console.log(e);
             toast.success('New Meeting Created: ' + e.meeting.name);
-            setUpcomingMeetings([...upcomingMeetings, e.meeting])
-            console.log(upcomingMeetings);
+            // console.log(e.meeting);
+            window.axios.get('/api/meetings/upcoming').then((response) => {
+                setUpcomingMeetings(response.data)
+            });
+            // console.log(upcomingMeetings);
         });
 
     const toggleDropdown = (id: number) => {
