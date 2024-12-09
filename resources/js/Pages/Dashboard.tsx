@@ -41,16 +41,18 @@ export default function Dashboard() {
 
 
 
-    Echo.private('meetings')
-        .listen('MeetingCreated', (e: any) => {
-            // console.log(e);
-            toast.success('New Meeting Created: ' + e.meeting.name);
-            // console.log(e.meeting);
-            window.axios.get('/api/meetings/upcoming').then((response) => {
-                setUpcomingMeetings(response.data)
+    useEffect(() => {
+        Echo.private('meetings')
+            .listen('MeetingCreated', (e: any) => {
+                // console.log(e);
+                toast.success('New Meeting Created: ' + e.meeting.name);
+                // console.log(e.meeting);
+                window.axios.get('/api/meetings/upcoming').then((response) => {
+                    setUpcomingMeetings(response.data)
+                });
+                // console.log(upcomingMeetings);
             });
-            // console.log(upcomingMeetings);
-        });
+        }, []);
 
     const toggleDropdown = (id: number) => {
         setDropdownOpen((prev) => (prev === id ? null : id));
