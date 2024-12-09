@@ -57,5 +57,9 @@ class JetstreamServiceProvider extends ServiceProvider
             'create',
             'update',
         ])->description('Secretary users have the ability to read, create, and update.');
+
+        Jetstream::role('user', 'User', [
+            'read',
+        ])->description('Users can only read');
     }
 }
