@@ -158,12 +158,12 @@ export default function UpdateProfileInformationForm({ user }: Props) {
       ) : null}
 
       {/* <!-- Name --> */}
-      <div className="col-span-6 sm:col-span-4">
+      <div className="col-span-6 sm:col-span-4 text-gray-50">
         <InputLabel htmlFor="name" value="Name" />
         <TextInput
           id="name"
           type="text"
-          className="mt-1 block w-full"
+          className="mt-1 block w-full bg-gray-500"
           value={form.data.name}
           onChange={e => form.setData('name', e.currentTarget.value)}
           autoComplete="name"
@@ -172,12 +172,12 @@ export default function UpdateProfileInformationForm({ user }: Props) {
       </div>
 
       {/* <!-- Email --> */}
-      <div className="col-span-6 sm:col-span-4">
+      <div className="col-span-6 sm:col-span-4 text-gray-50">
         <InputLabel htmlFor="email" value="Email" />
         <TextInput
           id="email"
           type="email"
-          className="mt-1 block w-full"
+          className="mt-1 block w-full bg-gray-500"
           value={form.data.email}
           onChange={e => form.setData('email', e.currentTarget.value)}
         />

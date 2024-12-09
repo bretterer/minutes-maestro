@@ -115,26 +115,26 @@ export default function TwoFactorAuthenticationForm({
       {(() => {
         if (twoFactorEnabled && !confirming) {
           return (
-            <h3 className="text-lg font-medium text-gray-900">
+            <h3 className="text-lg font-medium text-gray-50">
               You have enabled two factor authentication.
             </h3>
           );
         }
         if (confirming) {
           return (
-            <h3 className="text-lg font-medium text-gray-900">
+            <h3 className="text-lg font-medium text-gray-50">
               Finish enabling two factor authentication.
             </h3>
           );
         }
         return (
-          <h3 className="text-lg font-medium text-gray-900">
+          <h3 className="text-lg font-medium text-gray-50">
             You have not enabled two factor authentication.
           </h3>
         );
       })()}
 
-      <div className="mt-3 max-w-xl text-sm text-gray-600">
+      <div className="mt-3 max-w-xl text-sm text-gray-50">
         <p>
           When two factor authentication is enabled, you will be prompted for a
           secure, random token during authentication. You may retrieve this
