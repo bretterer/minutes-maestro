@@ -41,7 +41,7 @@ export default function Dashboard() {
 
 
 
-    window.Echo.private('meetings')
+    Echo.private('meetings')
         .listen('MeetingCreated', (e: any) => {
             console.log(e);
             toast.success('New Meeting Created: ' + e.meeting.name);
