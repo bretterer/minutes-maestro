@@ -46,7 +46,11 @@ class Meeting extends Model
 
     public static function upcomingMeetings(): Collection
     {
-        $meetings = auth()->user()->currentTeam->meetings()->with('notes')->orderBy('start_time')->where("start_time", ">=", now()->addHours(2))->get();
+        $meetings = auth()->user()->currentTeam->meetings()
+            ->with('notes')
+            ->orderBy('start_time')
+            ->where("start_time", ">=", now())
+            ->get();
 
         $meetings->map(function ($meeting) {
             $meeting->load('team.committees');
@@ -103,6 +107,4 @@ class Meeting extends Model
 
         return $recentMeetings;
     }
-
-
 }
