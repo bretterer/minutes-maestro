@@ -49,7 +49,7 @@ class Meeting extends Model
         $meetings = auth()->user()->currentTeam->meetings()
             ->with('notes')
             ->orderBy('start_time')
-            ->where("start_time", ">=", now())
+            ->where("start_time", ">=", now()->subHour())
             ->get();
 
         $meetings->map(function ($meeting) {
