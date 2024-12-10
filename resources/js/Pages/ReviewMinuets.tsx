@@ -1,5 +1,5 @@
 import { Committee, Meeting, Note } from '@/types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPencilAlt, FaEnvelope, FaPrint, FaFilePdf } from 'react-icons/fa';
 import TakeMinutesForm from './TakeMinutesForm';
 import ReactQuill from 'react-quill';
@@ -18,6 +18,19 @@ export default function ReviewMinuets({
   const [showApproveButton, setShowApproveButton] = useState(
     !meeting.minutesApproved,
   );
+
+
+  useEffect(() => {
+    Echo.private('meetings.' + meeting.id)
+        .listen('NotesSaved', (e: any) => {
+            console.log('Notes saved:', e);
+            setEditedNotes(e.meeting.notes);
+        });
+
+        return () => {
+            Echo.private('meetings.' + meeting.id).stopListening('NotesSaved');
+        }
+    }, []);
 
   const handleNotesChange = (notes: Note[]) => {
     setEditedNotes(notes);

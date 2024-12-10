@@ -11,6 +11,7 @@ type props = {
   onEdit?: (newNotes: Note[]) => void;
 };
 
+
 export default function TakeMinutesForm({ meeting, onClose, onEdit }: props) {
 
     const form = useForm({
@@ -22,6 +23,7 @@ export default function TakeMinutesForm({ meeting, onClose, onEdit }: props) {
     const [committees, setCommittees] = useState<Committee[]>([]);
     const [notes, setNotes] = useState<Note[]>(meeting?.notes || [])
     const user = usePage().props.auth.user;
+
 
     const meetingTitle = meeting?.title || '';
     let meetingStart = '';
@@ -68,6 +70,21 @@ export default function TakeMinutesForm({ meeting, onClose, onEdit }: props) {
         }
         setNotes(newNotes)
     }
+
+    const handleNotesUpdate = (content: string, committee: Committee) => {
+
+        const response = window.axios.post(`/meetings/${meeting?.id}/minutes`, {
+            committeeMinutes: Object.entries(form.data.committeeMinutes).map(([committeeId, content]) => ({
+                committee_id: committeeId,
+                content: content,
+            })),
+        });
+    }
+
+
+
+
+
 
 
 
@@ -198,6 +215,7 @@ export default function TakeMinutesForm({ meeting, onClose, onEdit }: props) {
                                 id={`committee-${committee.id}`}
                                 value={getNotes(committee)}
                                 onChange={(content) => handleNotesChange(content, committee)}
+                                onBlur={(content) => handleNotesUpdate(content, committee)}
                             />
                         </div>
                     ))}

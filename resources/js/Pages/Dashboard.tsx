@@ -209,6 +209,12 @@ export default function Dashboard() {
                                                                         Take Minutes
                                                                     </button>
                                                                     <button
+                                                                        onClick={() => openModal(meeting)} // Open Review Modal
+                                                                        className="block w-full text-left px-4 py-2 hover:bg-gray-600"
+                                                                    >
+                                                                        View
+                                                                    </button>
+                                                                    <button
                                                                         onClick={() => handleDelete(meeting.id)}
                                                                         className="block w-full text-left px-4 py-2 text-red-400 hover:bg-gray-600"
                                                                     >

@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\MeetingCreated;
+use App\Events\NotesSaved;
 use App\Http\Controllers\DashboardController;
 use App\Models\Meeting;
 use Illuminate\Foundation\Application;
@@ -84,6 +85,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 ]
             );
         }
+        NotesSaved::dispatch($meeting->fresh()->load('notes'));
         return response()->json($meeting->minutes, 201);
     })->name('minutes.store');
 
