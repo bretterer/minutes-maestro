@@ -45,7 +45,7 @@
                 @foreach ($meeting->notes as $minute)
                     <div class="mb-4 border-b-2 border-gray-300 pb-4">
                         <h3 class="text-xl font-bold">{{ $minute->committee->name }}</h3>
-                        <p>{{ $minute->content }}</p>
+                        <p>{{{ $minute->content }}}</p>
                     </div>
                 @endforeach
             </div>
