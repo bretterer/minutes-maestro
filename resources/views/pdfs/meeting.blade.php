@@ -35,7 +35,7 @@
              id="content">
             <div class="container mx-auto">
                 <h2 class="text-2xl font-bold">Meeting Minutes</h2>
-                <p class="mb-2">Date: {{ $meeting->date->format('d/m/Y') }}</p>
+                <p class="mb-2">Date: {{ $meeting->start_time->format('d/m/Y') }}</p>
                 @if($meeting->minutes_approved == 0)
                     <p class="mb-6">Status: Draft</p>
                 @else
