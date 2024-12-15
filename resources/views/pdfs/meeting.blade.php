@@ -27,6 +27,7 @@
                  src="{{ asset('img/minutesmaestro.png') }}"
                  alt="Logo">
             <h1 class="pt-4 text-center text-2xl text-white">{{ $meeting->name }}</h1>
+
         </div>
 
 
@@ -34,6 +35,12 @@
              id="content">
             <div class="container mx-auto">
                 <h2 class="text-2xl font-bold">Meeting Minutes</h2>
+                <p class="mb-2">Date: {{ $meeting->date->format('d/m/Y') }}</p>
+                @if($meeting->minutes_approved == 0)
+                    <p class="mb-6">Status: Draft</p>
+                @else
+                    <p class="mb-6">Status: Approved</p>
+                @endif
 
                 @foreach ($meeting->notes as $minute)
                     <div class="mb-4 border-b-2 border-gray-300 pb-4">
